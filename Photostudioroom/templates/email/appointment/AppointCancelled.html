@@ -1,0 +1,88 @@
+{% load static %}
+<html>
+<head>
+</head>
+<body style="font-size:medium;">
+    
+  Hello <strong>{{firstname}} {{lastname}}</strong>,
+  <br>
+  <p>
+  You Have Cancelled Your Appointment on Photostudioroom, <br>
+  According to Our Policies You Will Not Get Any Refund ,<br> So The Booking Payment You Paid For This Appointment will Not be Returned to You,<br>
+  <br>
+   
+  <br>
+
+  <u>  <b>Here Are The Details Of Cancelled Appointment:</b> </u> <br>
+  <i>
+      Appointment Id: {{appoint.appoint_id}}<br>
+      Appointment Date: {{appoint.date}}<br>
+      Appointment Time: {{appoint.time}}<br>
+      Event: {{appoint.event.event_name}}<br>
+      Place: {{appoint.location.location_name}}<br><br>
+
+      {% if appoint.photo_quantity != None %}
+      Photos Quantity: {{appoint.photo_quantity}} <br>
+      Booking Payment: <span
+      style='font-family:Arial;'>&#8377;</span> {{appoint.booking_payment}} <br>
+      Total Payment: <span
+      style='font-family:Arial;'>&#8377;</span> {{appoint.total_payment}} <br>
+      Remaining Payment: <span
+      style='font-family:Arial;'>&#8377;</span> {{appoint.remaining_payment}} <br>
+
+      {% else %}
+      {% if appoint.service == "photography" %}
+      Service: Photography
+      
+      {% elif appoint.service == "videography" %}
+      Service: Videography
+                          
+      {% else %}
+      Service: Photography + Videography
+      {% endif %}
+      <br>
+ <br>
+
+      {% if appoint.gears != None %}
+      {% if appoint.gears == "cameras" %}
+      Gears: Cameras
+      
+      {% else %}
+      Gears: Cameras + Drone
+      {% endif %}
+
+      {% endif %}
+      <br>
+      Booking Payment: <span
+      style='font-family:Arial;'>&#8377;</span> {{appoint.booking_payment}} <br>
+      
+      {% endif %}
+
+  </i>
+  {% if appoint.photo_quantity != None %}
+  
+  <u> <b> Event Address: </b> </u> <br>
+  <i>
+      {{address.address_line1}} {{address.address_line2}}, {{address.area.area_name}}, {{address.city.city_name}}, {{address.state.state_name}}
+
+  </i>
+  
+
+  {% else %}
+  Studio Address
+  {% endif %}
+
+<br>
+<br>
+<p> You Can Also View The Details of Your Cancelled Appointments in Your Profile. </p>
+  
+  <br> <br>
+
+
+
+  Regards,
+  <br>
+  Photostudioroom 
+  </p>
+</body>
+</html>

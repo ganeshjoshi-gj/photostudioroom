@@ -1,0 +1,89 @@
+{% load static %}
+<html>
+<head>
+</head>
+<body style="font-size:medium;">
+    
+  Hello <strong>{{firstname}} {{lastname}}</strong>,
+  <br>
+  <p>
+  You Have Made Changes in Your Appointment, So The Photographer Will be Reassigned to You,<br>
+  You Don't Have to Pay Booking Payment Again, but Your Total Payment May be Changed, <br>
+  It Depends On Your Selected Event,Photos Quantity and Place.<br>
+   
+  <br>
+
+  <u>  <b>Here Are The Updated Details Of Your Appointment:</b> </u> <br>
+  <i>
+      Appointment Id: {{appoint.appoint_id}}<br>
+      Appointment Date: {{appoint.date}}<br>
+      Appointment Time: {{appoint.time}}<br>
+      Event: {{appoint.event.event_name}}<br>
+      Place: {{appoint.location.location_name}}<br><br>
+
+      {% if appoint.photo_quantity != None %}
+      Photos Quantity: {{appoint.photo_quantity}} <br>
+      Booking Payment: {{appoint.booking_payment}} <br>
+      Total Payment: {{appoint.total_payment}} <br>
+      Remaining Payment: {{appoint.remaining_payment}} <br>
+
+      {% else %}
+      {% if appoint.service == "photography" %}
+      Service: Photography
+      
+      {% elif appoint.service == "videography" %}
+      Service: Videography
+                          
+      {% else %}
+      Service: Photography + Videography
+      {% endif %}
+      <br>
+
+      {% if appoint.gears != None %}
+      {% if appoint.gears == "cameras" %}
+      Gears: Cameras
+      
+      {% else %}
+      Gears: Cameras + Drone
+      {% endif %}
+
+      
+      {% endif %}
+      <br>
+      
+      Booking Payment: <span
+      style='font-family:Arial;'>&#8377;</span> {{appoint.booking_payment}} <br>
+      
+      {% endif %}
+
+  </i>
+  {% if appoint.photo_quantity != None %}
+  <u> <b> Event Address: </b> </u> <br>
+  <i>
+      {{address.address_line1}} {{address.address_line2}}, {{address.area.area_name}}, {{address.city.city_name}}, {{address.state.state_name}}
+
+  </i>
+  {% else %}
+  Studio Address
+  {% endif %}
+  <br> <br>
+  <u> <b> Your Contact Details: </b> </u><br>
+  <i>
+    Contact No: {{address.contact_1}}<br>
+    {% if address.contact_2|length > 9 %}
+
+    Alternative Contact No: {{address.contact_2}}<br>
+
+    {% endif %}
+  </i>
+
+  <p> You Can Also View The Details of Your Appointment in Your Profile. </p>
+
+
+  <br>
+  Regards,
+  <br>
+  Photostudioroom 
+  </p>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% load static %}
+<html>
+<head>
+</head>
+<body style="font-size:medium;">
+    
+  Hello <strong>{{firstname}} {{lastname}}</strong>,
+  <br>
+  <p>
+  You Have Deleted Your Image On Photostudioroom,<br>
+  According to Our Policies, The Image is Deleted Permanently and There is No Way to Get it Back,<br>
+  We Hope You Haven't Done This By Mistake.<br>
+  Have a Nice Day!"
+  
+  <br><br>
+
+  <u>  <b>Here Are The Details Of Your Deleted Image:</b> </u> <br>
+  <i>
+      Image Id: {{image.image_id}}<br>
+      Image Name: {{image.image_name}}<br>
+      Description: {{image.description}}<br>
+      Category: {{image.category.category_name}}<br>
+      Tags: {{image.tags}}<br><br>
+
+      <br>
+
+  </i>
+
+
+  <br>
+  Regards,
+  <br>
+  Photostudioroom 
+  </p>
+</body>
+</html>

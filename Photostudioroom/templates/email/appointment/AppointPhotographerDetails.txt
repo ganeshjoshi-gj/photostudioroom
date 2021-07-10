@@ -1,0 +1,46 @@
+    
+  Hello {{firstname}} {{lastname}},
+  
+  Thank You For Booking Appointment For Photoshoot on Photostudioroom,
+  {% if isnew %}
+  Photographer Has Been Assigned For Your Photoshoot,
+  {% else %}
+  Due to Some Issue From Our Side,The Photographer Has Been Reassigned For Your Photoshoot,
+  {% endif %}
+  Here Are The Details Of Your Appointment: 
+
+    Appointment Id: {{appoint.appoint_id}}
+    Appointment Date: {{appoint.date}}
+    Appointment Time: {{appoint.time}}
+    Event: {{appoint.event.event_name}}
+    Place: {{appoint.location.location_name}}
+
+    {% if appoint.photo_quantity != None %}
+    
+    Photos Quantity: {{appoint.photo_quantity}}
+    Booking Payment: {{appoint.booking_payment}}
+    Total Payment: {{appoint.total_payment}}
+    Remaining Payment: {{appoint.remaining_payment}}
+    
+    {% endif %}
+      
+
+  
+   Event Address:
+      {{address.address_line1}} {{address.address_line2}}, {{address.area}}, {{address.city}}, {{address.state}}
+    
+   Here Are The Photographer's Details: 
+   
+      Photographer Name: {{photographer.name}}
+      Phone: {{photographer.contact_no}}
+      Email: {{photographer.email}} 
+  
+    
+  
+  
+  Our Photographer Will Visit You On Time, For Confirmation You will also Get a Call From Our Photographer Before Half an Hour Of Your Appointment Time,
+  Have a Nice Day!
+  Regards,
+  
+  Photostudioroom 
+  

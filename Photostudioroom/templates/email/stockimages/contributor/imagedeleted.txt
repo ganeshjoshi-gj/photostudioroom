@@ -1,0 +1,28 @@
+{% load static %}
+
+    
+  Hello {{firstname}} {{lastname}},
+    
+
+  You Have Deleted Your Image On Photostudioroom,  
+  According to Our Policies, The Image is Deleted Permanently and There is No Way to Get it Back,  
+  We Hope You Haven't Done This By Mistake.  
+  Have a Nice Day!"
+  
+    
+
+Here Are The Details Of Your Deleted Image:
+
+      Image Id: {{image.image_id}}  
+      Image Name: {{image.image_name}}  
+      Description: {{image.description}}  
+      Category: {{image.category.category_name}}  
+      Tags: {{image.tags}}    
+
+        
+
+
+    
+  Regards,
+    
+  Photostudioroom 

@@ -1,0 +1,58 @@
+{% load static %}
+<html>
+<head>
+</head>
+<body style="font-size:medium;">
+    
+  Hello <strong>{{firstname}} {{lastname}}</strong>,
+  <br>
+  <p>
+  Thank You For Booking Appointment For Photoshoot on Photostudioroom,<br>
+  {% if isnew %}
+  Photographer Has Been Assigned For Your Photoshoot,<br><br>
+  {% else %}
+  Due to Some Issue From Our Side,The Photographer Has Been Reassigned For Your Photoshoot,<br><br>
+  {% endif %}
+  <u> <b>Here Are The Details Of Your Appointment: </b> </u> <br>
+  <i>
+    Appointment Id: {{appoint.appoint_id}}<br>
+    Appointment Date: {{appoint.date}}<br>
+    Appointment Time: {{appoint.time}}<br>
+    Event: {{appoint.event.event_name}}<br>
+    Place: {{appoint.location.location_name}}<br><br>
+
+    {% if appoint.photo_quantity != None %}
+
+    Photos Quantity: {{appoint.photo_quantity}} <br>
+    Booking Payment: <span
+    style='font-family:Arial;'>&#8377;</span> {{appoint.booking_payment}} <br>
+    Total Payment: <span
+    style='font-family:Arial;'>&#8377;</span> {{appoint.total_payment}} <br>
+    Remaining Payment: <span
+    style='font-family:Arial;'>&#8377;</span> {{appoint.remaining_payment}} <br>
+    
+    {% endif %}
+      
+
+  </i> <br>
+  <u> <b> Event Address: </b> </u> <br>
+      {{address.address_line1}} {{address.address_line2}}, {{address.area}}, {{address.city}}, {{address.state}}
+    <br><br>
+   <u> <b> Here Are The Photographer's Details: </u> </b> <br>
+   <i>
+      Photographer Name: {{photographer.name}}<br>
+      Phone: {{photographer.contact_no}}<br>
+      Email: {{photographer.email}} <br>
+    </i>
+    
+  
+  <br>
+  Our Photographer Will Visit You On Time, For Confirmation You will also Get a Call From Our Photographer Before Half an Hour Of Your Appointment Time,<br><br>
+  Have a Nice Day!<br><br>
+  Regards,
+  <br>
+  Photostudioroom 
+  </p>
+  
+</body>
+</html>

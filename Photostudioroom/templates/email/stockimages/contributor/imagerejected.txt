@@ -1,0 +1,15 @@
+
+  Hello {{firstname}} {{lastname}},
+      
+ Thank Your For Requesting Image Approval On Photostudioroom,     
+    After Reviewing Your Image We Found Something Wrong With Your Image So We Have Rejected it,     
+    If You Think it is a Mistake From Our Side, Then Try Reuploading it.    
+    Have a Nice Day!
+
+  
+      
+
+      
+  Regards,
+      
+  Photostudioroom 

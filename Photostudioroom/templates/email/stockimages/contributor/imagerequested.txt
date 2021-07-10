@@ -1,0 +1,16 @@
+
+    
+  Hello {{firstname}} {{lastname}},
+      
+  
+    Thank You For Requesting Image Approval On Photostudioroom, We've Received Your Request,    
+    After Reviewing Your Request ,We Will Get Back to You Soon,    
+    Have a Nice Day!
+  
+      
+
+      
+  Regards,
+      
+  Photostudioroom 
+ 

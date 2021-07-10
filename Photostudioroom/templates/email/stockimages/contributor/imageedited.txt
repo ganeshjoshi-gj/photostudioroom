@@ -1,0 +1,30 @@
+{% load static %}
+    
+  Hello {{firstname}} {{lastname}},
+   
+   
+  You Have Made Changes to Your Image On Photostudioroom, 
+  The Image Will be Reviewed Again Before Going Live On Photostudioroom, 
+  After Reviewing Your Request ,We Will Get Back to You Soon, Have a Nice Day!"
+  
+   
+
+      Here Are The Details Of Your Updated Image:     
+   
+      Image Id: {{image.image_id}} 
+      Image Name: {{image.image_name}} 
+      Description: {{image.description}} 
+      Category: {{image.category.category_name}} 
+      Tags: {{image.tags}}  
+
+       
+
+   
+
+    You Can Also View The Details of Your Image in Your Dashboard.  
+
+
+  
+  Regards,
+  
+  Photostudioroom 

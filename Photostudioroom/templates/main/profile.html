@@ -1,0 +1,1370 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{user.username}} | Photostudioroom</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+    href="{% static 'assets/css/stockimages/contributor/plugins/fontawesome-free/css/all.min.css'%}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'assets/css/stockimages/contributor/profile/adminlte.min.css'%}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <link href="{% static 'assets/img/PSRicon.jpg' %}" rel="icon">
+  <script src="{%static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+  <script>
+    //TO SHOW CHANGE PASSWORD FORM AND HIDE CHANGE OTHER DETAILS FORM
+    function showChangePassForm() {
+      document.getElementById("changepasswordform").style.display = "block";
+      document.getElementById("changepassref").style.display = "none";
+      document.getElementById("hidepassref").style.display = "block";
+      document.getElementById("personalother").style.display = "none";
+      $('#personaldetailsform').attr('action', '/updatepassword');
+
+      $("#newpassword").attr("required", "true");
+      $("#oldpassword").attr("required", "true");
+      $("#confirmnewpassword").attr("required", "true");
+
+
+    }
+
+    //TO HIDE CHANGE PASSWORD FORM AND SHOW CHANGE OTHER DETAILS FORM
+    function hideChangePassForm() {
+      document.getElementById("changepasswordform").style.display = "none";
+      document.getElementById("changepassref").style.display = "block";
+      document.getElementById("hidepassref").style.display = "none";
+      document.getElementById("personalother").style.display = "block";
+      $('#personaldetailsform').attr('action', '/updatepersonal');
+
+    }
+
+    //AJAX TO CHECK IF ENTERED USERNAME IS AVAILABLE OR NOT
+
+    $(document).ready(function () {
+      $("#username").focusout(function (e) {
+        console.log("we are in user name focusout")
+
+        // get the nickname
+        var username = $(this).val();
+        // GET AJAX request
+        $.ajax({
+          type: 'GET',
+          url: "{% url 'checkUsername' %}",
+          data: { "username": username },
+          success: function (response) {
+            // if not valid user, alert the user
+            if (!response["valid"]) {
+              swal({
+                title: "Please Enter a Different Username",
+                text: "This Username is already taken by someone else!",
+                icon: "error",
+                dangerMode: true,
+
+              }).then((isConfirm) => {
+                var username = $("#username");
+                username.val("")
+                username.focus()
+              });
+            }
+          },
+          error: function (response) {
+            console.log(response)
+          }
+        })
+      });
+
+    });
+
+    $(document).ready(function () {
+
+      $("#personaldetailsform").on("submit", function () {
+        let oldpass = $("#oldpassword").val();
+        let newpass = $("#newpassword").val();
+        let confirmpass = $("#confirmnewpassword").val();
+        console.log("Confirm: " + confirmpass)
+        if (newpass != "" && oldpass != "" && confirmpass != "") {
+          if (newpass != confirmpass) {
+
+            swal({
+              title: "Password and Confirm Password Doesn't Matched!!",
+              icon: "error",
+              dangerMode: true,
+
+            }).then((isConfirm) => {
+              let confirmpass = $("#confirmnewpassword");
+              let newpass = $("#newpassword");
+              newpass.val("");
+              confirmpass.val("");
+              newpass.focus();
+            });
+
+            event.preventDefault();
+          }
+
+          if (oldpass == newpass) {
+            
+            swal({
+              title: "New Password and Old Password Can't be Same!",
+              icon: "error",
+              dangerMode: true,
+
+            }).then((isConfirm) => {
+              let oldpass = $("#oldpassword");
+              let newpass = $("#newpassword");
+              let confirmpass = $("#confirmnewpassword");
+              newpass.val("");
+              confirmpass.val("");
+              oldpass.val("");
+              oldpass.focus();
+
+            });
+            event.preventDefault();
+          }
+        }
+
+
+      });
+
+    });
+
+
+    $(document).ready(function () {
+      $("#selectstate").change(function () {
+        console.log("State Changed")
+        var url = "{% url 'ajax_load_cities' %}"  // get the url of the `load_cities` view
+        var stateId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+          url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+          data: {
+            'state': stateId       // add the country id to the GET parameters
+          },
+          success: function (data) {   // `data` is the return of the `load_cities` view function
+            $(".jsselectcity").html(data);  // replace the contents of the city input with the data that came from the server
+          }
+        });
+
+      });
+
+      $("#selectcity").change(function () {
+        console.log("State Changed")
+        var url = "{% url 'ajax_load_areas' %}"  // get the url of the `load_cities` view
+        var cityId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+          url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+          data: {
+            'city': cityId       // add the country id to the GET parameters
+          },
+          success: function (data) {   // `data` is the return of the `load_cities` view function
+            $(".jsselectarea").html(data);  // replace the contents of the city input with the data that came from the server
+          }
+        });
+
+      });
+    });
+
+    /* For Upload Profile Photo */
+    $(document).ready(function () {
+      //$("#uploadbutton").hide();
+
+      var readURL = function (input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $('.profile-pic').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+
+      $(".file-upload").on('change', function () {
+        $("#uploadbutton").show();
+        $("#cancelbutton").show();
+        readURL(this);
+      });
+
+      $(".upload-button").on('click', function () {
+
+        $(".file-upload").click();
+      });
+
+    });
+
+
+    /* For Appointments */
+    $(document).ready(function () {
+      $("#btnappoint").on("click", function () {
+        $("#cancelledappointments").hide();
+        $("#appointments").show(700);
+        $("#editinfo").hide();
+        $("#imagesid").hide();
+      });
+      $("#btncancelledappoint").on("click", function () {
+
+        $("#cancelledappointments").show(700);
+        $("#appointments").hide();
+        $("#editinfo").hide();
+        $("#imagesid").hide();
+      });
+      $("#btnedit").on("click", function () {
+        $("#cancelledappointments").hide();
+        $("#appointments").hide();
+        $("#editinfo").show(700);
+        $("#imagesid").hide();
+      });
+      $("#btnimages").on("click", function () {
+
+        $("#cancelledappointments").hide();
+        $("#appointments").hide();
+        $("#editinfo").hide();
+        $("#imagesid").show(700);
+      });
+
+    });
+
+
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .select {
+      position: relative;
+      min-width: 200px;
+
+    }
+
+    .select svg {
+      position: absolute;
+      right: 12px;
+      top: calc(50% - 3px);
+      width: 10px;
+      height: 6px;
+      stroke-width: 2px;
+      stroke: #9098a9;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    .select select {
+      -webkit-appearance: none;
+      padding: 7px 40px 7px 12px;
+      width: 100%;
+      border: 1px solid #e8eaed;
+      border-radius: 5px;
+      background: #fff;
+      box-shadow: 0 1px 3px -2px #9098a9;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 16px;
+      transition: all 150ms ease;
+    }
+
+    .select select:required:invalid {
+      color: #5a667f;
+    }
+
+    .select select option {
+      color: #223254;
+    }
+
+    .select select option[value=""][disabled] {
+      display: none;
+    }
+
+    .select select:focus {
+      outline: none;
+      border-color: #07f;
+      box-shadow: 0 0 0 2px rgba(0, 119, 255, 0.2);
+    }
+
+    .select select:hover+svg {
+      stroke: #07f;
+    }
+
+    .sprites {
+      position: absolute;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+
+    /* Upload Profile Photo  */
+
+
+    .profile-pic {
+      object-fit: cover;
+      max-height: 200px;
+      display: block;
+    }
+
+    .file-upload {
+      display: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+
+
+    }
+
+    .p-image {
+      position: absolute;
+      top: 90px;
+      right: 130px;
+      color: #666666;
+      transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+    .p-image:hover {
+      transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+    .upload-button {
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+
+    .upload-button:hover {
+      transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+      color: #999;
+    }
+
+    /* CSS for appointments */
+    @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
+
+    body {
+
+      font-family: "Roboto", helvetica, arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      text-rendering: optimizeLegibility;
+    }
+
+    div.table-title {
+      display: block;
+      margin: auto;
+      max-width: 600px;
+      padding: 5px;
+      width: 100%;
+    }
+
+    .table-title h3 {
+      color: #fafafa;
+      font-size: 20px;
+      font-weight: 300;
+      font-style: normal;
+      font-family: "Roboto", helvetica, arial, sans-serif;
+      text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+      text-transform: uppercase;
+    }
+
+
+    /*** Table Styles **/
+
+    .table-fill {
+      background: white;
+      border-radius: 3px;
+      border-collapse: collapse;
+      height: 10px;
+      margin: auto;
+      max-width: 100%;
+      padding: 5px;
+      width: 100%;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      animation: float 5s infinite;
+    }
+
+    th {
+      color: #D5DDE5;
+      background: #1b1e24;
+      border-bottom: 4px solid #9ea7af;
+      border-right: 1px solid #343a45;
+      font-size: 20px;
+      font-weight: 100;
+      padding: 14px;
+      text-align: left;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+      vertical-align: middle;
+    }
+
+    th:first-child {
+      border-top-left-radius: 3px;
+    }
+
+    th:last-child {
+      border-top-right-radius: 3px;
+      border-right: none;
+    }
+
+    tr {
+      border-top: 1px solid #C1C3D1;
+      border-bottom: 1px solid #C1C3D1;
+      color: #666B85;
+      font-size: 16px;
+      font-weight: normal;
+      text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+    }
+
+    tr:hover td {
+      background: #4E5066;
+      color: #FFFFFF;
+      border-top: 1px solid #22262e;
+    }
+
+    tr:first-child {
+      border-top: none;
+    }
+
+    tr:last-child {
+      border-bottom: none;
+    }
+
+    tr:nth-child(odd) td {
+      background: #EBEBEB;
+    }
+
+    tr:nth-child(odd):hover td {
+      background: #4E5066;
+    }
+
+    tr:last-child td:first-child {
+      border-bottom-left-radius: 3px;
+    }
+
+    tr:last-child td:last-child {
+      border-bottom-right-radius: 3px;
+    }
+
+    td {
+      background: #FFFFFF;
+      padding: 10px;
+      text-align: left;
+      vertical-align: middle;
+      font-weight: 300;
+      font-size: 18px;
+      text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+      border-right: 1px solid #C1C3D1;
+    }
+
+    td:last-child {
+      border-right: 0px;
+    }
+
+    th.text-left {
+      text-align: left;
+    }
+
+    th.text-center {
+      text-align: center;
+    }
+
+    th.text-right {
+      text-align: right;
+    }
+
+    td.text-left {
+      text-align: left;
+    }
+
+    td.text-center {
+      text-align: center;
+    }
+
+    td.text-right {
+      text-align: right;
+    }
+
+    .navbargj:hover {
+      background-color: #ef6603;
+      border-radius: 50px;
+    }
+
+    /*NAVBAR*/
+    .navbargj:hover {
+      background-color: #ef6603;
+      border-radius: 50px;
+
+    }
+
+    /*HEADER*/
+    /*--------------------------------------------------------------
+			 Header
+		--------------------------------------------------------------*/
+    #header {
+      height: 70px;
+      transition: all 0.5s;
+      z-index: 997;
+      transition: all 0.5s;
+
+    }
+
+    #header.header-transparent {
+      background: transparent;
+    }
+
+    #header.header-scrolled {
+      background: rgba(42, 44, 57, 0.9);
+    }
+
+    #header .logo h1 {
+      font-size: 28px;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    #header .logo h1 a,
+    #header .logo h1 a:hover {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    #header .logo img {
+      padding: 0;
+      margin: 0;
+      max-height: 40px;
+    }
+
+    .nav-color-psr {
+      background: rgb(49, 51, 70);
+    }
+
+    ;
+
+    /*--------------------------------------------------------------
+# Navigation Menu
+--------------------------------------------------------------*/
+    /* Desktop Navigation */
+    .nav-menu,
+    .nav-menu * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-menu>ul>li {
+      position: relative;
+      white-space: nowrap;
+      float: left;
+    }
+
+    .nav-menu a {
+      display: block;
+      position: relative;
+      color: #fff;
+      padding: 5px 15px 7px 15px;
+      margin-left: 5px;
+      transition: 0.3s;
+      font-size: 14px;
+      border-radius: 50px;
+      font-family: "Open Sans", sans-serif;
+    }
+
+    .nav-menu a:hover,
+    .nav-menu .active>a,
+    .nav-menu li:hover>a {
+      background: #ef6603;
+      text-decoration: none;
+    }
+
+    .nav-menu .drop-down ul {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: calc(100% - 30px);
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+      padding: 10px 0;
+      background: #fff;
+      box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+      transition: ease all 0.3s;
+      border-radius: 15px;
+      margin-top: 5px;
+    }
+
+    .nav-menu .drop-down:hover>ul {
+      opacity: 1;
+      top: 100%;
+      visibility: visible;
+    }
+
+    .nav-menu .drop-down li {
+      min-width: 180px;
+      position: relative;
+    }
+
+    .nav-menu .drop-down ul a {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: none;
+      color: #2a2c39;
+    }
+
+    .nav-menu .drop-down ul a:hover,
+    .nav-menu .drop-down ul .active>a,
+    .nav-menu .drop-down ul li:hover>a {
+      color: #ef6603;
+      background: none;
+    }
+
+    .nav-menu .drop-down>a:after {
+      content: "\ea99";
+      font-family: IcoFont;
+      padding-left: 5px;
+    }
+
+    .nav-menu .drop-down .drop-down ul {
+      top: 0;
+      left: calc(100% - 30px);
+    }
+
+    .nav-menu .drop-down .drop-down:hover>ul {
+      opacity: 1;
+      top: 0;
+      left: 100%;
+    }
+
+    .nav-menu .drop-down .drop-down>a {
+      padding-right: 35px;
+    }
+
+    .nav-menu .drop-down .drop-down>a:after {
+      content: "\eaa0";
+      font-family: IcoFont;
+      position: absolute;
+      right: 15px;
+    }
+
+    @media (max-width: 1366px) {
+      .nav-menu .drop-down .drop-down ul {
+        left: -90%;
+      }
+
+      .nav-menu .drop-down .drop-down:hover>ul {
+        left: -100%;
+      }
+
+      .nav-menu .drop-down .drop-down>a:after {
+        content: "\ea9d";
+      }
+    }
+
+    /* Mobile Navigation */
+    .mobile-nav-toggle {
+      position: fixed;
+      right: 15px;
+      top: 15px;
+      z-index: 9998;
+      border: 0;
+      background: none;
+      font-size: 24px;
+      transition: all 0.4s;
+      outline: none !important;
+      line-height: 1;
+      cursor: pointer;
+      text-align: right;
+    }
+
+    .mobile-nav-toggle i {
+      color: #fff;
+    }
+
+    .mobile-nav {
+      position: fixed;
+      top: 55px;
+      right: 15px;
+      bottom: 15px;
+      left: 15px;
+      z-index: 9999;
+      overflow-y: auto;
+      background: #fff;
+      transition: ease-in-out 0.2s;
+      opacity: 0;
+      visibility: hidden;
+      border-radius: 10px;
+      padding: 10px 0;
+    }
+
+    .mobile-nav * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mobile-nav a {
+      display: block;
+      position: relative;
+      color: #2a2c39;
+      padding: 10px 20px;
+      font-weight: 500;
+      outline: none;
+    }
+
+    .mobile-nav a:hover,
+    .mobile-nav .active>a,
+    .mobile-nav li:hover>a {
+      color: #ef6603;
+      text-decoration: none;
+    }
+
+    .mobile-nav .drop-down>a:after {
+      content: "\ea99";
+      font-family: IcoFont;
+      padding-left: 10px;
+      position: absolute;
+      right: 15px;
+    }
+
+    .mobile-nav .active.drop-down>a:after {
+      content: "\eaa1";
+    }
+
+    .mobile-nav .drop-down>a {
+      padding-right: 35px;
+    }
+
+    .mobile-nav .drop-down ul {
+      display: none;
+      overflow: hidden;
+    }
+
+    .mobile-nav .drop-down li {
+      padding-left: 20px;
+    }
+
+    .mobile-nav-overly {
+      width: 100%;
+      height: 100%;
+      z-index: 9997;
+      top: 0;
+      left: 0;
+      position: fixed;
+      background: rgba(20, 21, 28, 0.6);
+      overflow: hidden;
+      display: none;
+      transition: ease-in-out 0.2s;
+    }
+
+    .mobile-nav-active {
+      overflow: hidden;
+    }
+
+    .mobile-nav-active .mobile-nav {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-nav-active .mobile-nav-toggle i {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <header id="header" class="fixed-top d-flex align-items-center nav-color-psr">
+      <div class="container d-flex align-items-center">
+
+        <div class="logo" style="margin-left: -150px;">
+          <h1 class="text-light"><a href="/">Photostudioroom</a></h1>
+          <!--Changed This-->
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        </div>
+
+        <nav class="nav-menu d-none d-lg-block p-5" style="margin-top: 5px;">
+          <ul style="list-style-type: none;">
+            <!--ishomeactive for home,isappointactive for appointment,isstockactive for stockimages html page to set nav bar to orange bg as active page-->
+            <li><a href="/">Home</a></li>
+            {% if user.is_contributor %}
+            <li><a href="/stockimages/contributor/dashboard">Dashboard</a></li>
+            {%endif%}
+          </ul>
+
+        </nav><!-- .nav-menu -->
+
+
+      </div>
+    </header><!-- End Header -->
+
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="margin-top: 70px;background-color:#D5DDE5">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 style="margin-left: 130px;">Profile</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+
+                <li class="breadcrumb-item active">Welcome {{user.username}}</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3" style="margin-top: -20px;">
+
+              <!-- Profile Image -->
+              <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                  <div class="text-center">
+                    <form action="/uploadprofilephoto" id="profilephotosubmitform" method="POST"
+                      enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <img id="profilephotoid" class="profile-user-img img-fluid img-circle profile-pic upload-button"
+                        src="media/{{curuser.profile_photo}}" alt="User profile picture">
+
+                      <input id="fileuploadid" name="profileimage" class="file-upload" type="file" accept="image/*" />
+                      <div style="text-align: -webkit-center; display: inline-flex;">
+                        <input id="uploadbutton" type="submit" class="btn btn-primary btn-block" value="Upload"
+                          style="margin-top: 10px; width: fit-content;display: none;" />
+                        <input id="cancelbutton" type="button" class="btn btn-primary btn-block" value="Cancel"
+                          style="margin-top: 10px; width: fit-content;display: none;margin-left: 5px;" /
+                          onclick="window.location.href='/profile'">
+                      </div>
+                    </form>
+                  </div>
+
+                  <h3 class="profile-username text-center">{{user.first_name}} {{user.last_name}}</h3>
+
+                  {% if user.is_customer %}
+                  <p class="text-muted text-center">Customer</p>
+                  {%else%}
+                  <p class="text-muted text-center">Contributor</p>
+                  {%endif%}
+
+                  <p class="text-muted text-center">Date Joined: {{curuser.date_created}}</p>
+
+
+
+                  <a href="/logout" class="btn btn-primary btn-block"><b>Logout</b></a>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+
+
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9" style="margin-top: -20px;">
+              <div class="card">
+                <div class="card-header p-2">
+                  <ul class="nav nav-pills">
+
+                    <li class="nav-item"><a class="nav-link active" id="btnedit" href="#editinfo" data-toggle="tab">Edit
+                        Profile</a> </li>
+                    {%if user.is_customer%}
+                    <li class="nav-item"><a class="nav-link" id="btnappoint" href="#appointments"
+                        data-toggle="tab">Active Appointments</a> </li>
+                    <li class="nav-item"><a class="nav-link" id="btncancelledappoint" href="#cancelledappointments"
+                        data-toggle="tab">Cancelled Appointments</a> </li>
+                    <li class="nav-item"><a class="nav-link" id="btnimages" href="#imagesid"
+                        data-toggle="tab">Purchased Images</a>
+                    </li>
+
+
+                    {% endif %}
+                  </ul>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                  <div class="tab-content">
+
+                    <!-- /.tab-pane -->
+
+                    <!-- /.tab-pane -->
+
+                    <div class="tab-pane active" id="editinfo">
+                      <!--FORM1-->
+                      {%if msg%}
+                      {%if "Not" in msg %}
+                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Failed!!</strong>
+                        {%else%}
+
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                          <strong>Success!!</strong>
+                          {%endif%}
+                          {{msg}}
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        </div>
+                        {%endif%}
+                        <h3 style="margin-bottom:10px"> Personal Information </h3>
+                        <form id="personaldetailsform" class="form-horizontal" method="POST" action="/updatepersonal">
+                          {% csrf_token %}
+                          <div id="personalother">
+                            <div class="form-group row">
+                              <label for="inputFirstName" class="col-sm-2 col-form-label">Firstname</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" id="firstname" name="firstname"
+                                  placeholder="{{user.first_name}}">
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="inputLastName" class="col-sm-2 col-form-label">Lastname</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" id="lastname" name="lastname"
+                                  placeholder="{{user.last_name}}">
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="inputUserName" class="col-sm-2 col-form-label">Username</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" id="username" name="username"
+                                  placeholder="{{user.username}}">
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                              <div class="col-sm-10">
+                                <input type="email" class="form-control" id="email" name="email"
+                                  placeholder="{{user.email}}">
+                              </div>
+                            </div>
+                          </div>
+
+                          <a href="#changepassword" id="changepassref" style="margin-left: 17%"
+                            onclick="showChangePassForm()">Change Password</a>
+
+                          <a href="#changepassword" id="hidepassref" style="margin-left: 17%;display: none;"
+                            onclick="hideChangePassForm()">Change Other Details</a>
+                          <div id="personalpassword">
+                            <div id="changepasswordform" style="display: none;">
+                              <div class="form-group row">
+                                <label for="inputOldPassword" class="col-sm-2 col-form-label">Old Password</label>
+                                <div class="col-sm-10">
+                                  <input type="password" class="form-control" id="oldpassword" name="oldpassword"
+                                    placeholder="Old Password" minlength="8" maxlength="100">
+                                </div>
+                              </div>
+
+                              <div class="form-group row">
+                                <label for="inputNewPassword" class="col-sm-2 col-form-label" minlength="8"
+                                  maxlength="100">New Password</label>
+                                <div class="col-sm-10">
+                                  <input type="password" class="form-control" id="newpassword" name="newpassword"
+                                    placeholder="New Password" minlength="8" maxlength="100">
+                                </div>
+                              </div>
+
+                              <div class="form-group row">
+                                <label for="inputConfirmNewPassword" class="col-sm-2 col-form-label">Confirm
+                                  Password</label>
+                                <div class="col-sm-10">
+                                  <input type="password" class="form-control" id="confirmnewpassword"
+                                    name="confirmnewpassword" placeholder="Confirm Password">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                          <div class="form-group row">
+                            <div class="offset-sm-2 col-sm-10">
+                              <button type="submit" id="submitpersonal" class="btn btn-danger">Submit</button>
+                            </div>
+                          </div>
+                        </form>
+                        <!--FORM2-->
+                        <h3 style="margin-bottom:10px"> Address </h3>
+                        <form id="addressform" class="form-horizontal" method="POST" action="/updateaddress">
+                          {% csrf_token %}
+                          <div class="form-group row">
+                            <label for="inputAddressLine1" class="col-sm-2 col-form-label">Address Line 1</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="addressline1" name="addressline1"
+                                value="{{address.address_line1}}" required>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="inputAddressLine2" class="col-sm-2 col-form-label">Address Line 2</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="addressline2" name="addressline2"
+                                value="{{address.address_line2}}" required>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+
+                            <label for="inputState" class="col-sm-2 col-form-label">State </label>
+
+                            <label class="select" for="selectstate">
+                              <select id="selectstate" name="selectstate" required="required" class="jsselectstate"
+                                style="margin-left: 15px;">
+                                {% if address is not None %}
+
+                                <option value="" selected="selected">{{address.state}}</option>
+
+                                {%else%}
+                                <option value="" disabled="disabled" selected="selected">Select State</option>
+                                {%endif%}
+                                {% for state in states %}
+                                <option value="{{state.state_id}}"> {{state.state_name}}</option>
+                                {%endfor%}
+                              </select>
+                              <svg>
+                                <use xlink:href="#select-arrow-down"></use>
+                              </svg>
+                            </label>
+                            <!-- SVG Sprites-->
+                            <svg class="sprites">
+                              <symbol id="select-arrow-down" viewbox="0 0 10 6">
+                                <polyline points="1 1 5 5 9 1"></polyline>
+                              </symbol>
+                            </svg>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputCity" class="col-sm-2 col-form-label">City </label>
+
+
+                            <label class="select" for="selectcity">
+                              <select id="selectcity" name="selectcity" required="required" class="jsselectcity"
+                                style="margin-left: 15px;">
+                                {% if address is not None %}
+
+                                <option value="" selected="selected">{{address.city}}</option>
+
+                                {%else%}
+                                <option value="" disabled="disabled" selected="selected">Select City</option>
+                                {%endif%}
+
+
+
+                              </select>
+                              <svg>
+                                <use xlink:href="#select-arrow-down"></use>
+                              </svg>
+                            </label>
+                            <!-- SVG Sprites-->
+                            <svg class="sprites">
+                              <symbol id="select-arrow-down" viewbox="0 0 10 6">
+                                <polyline points="1 1 5 5 9 1"></polyline>
+                              </symbol>
+                            </svg>
+                          </div>
+                          <div class="form-group row">
+                            <label for="inputArea" class="col-sm-2 col-form-label">Area </label>
+                            <label class="select" for="selectarea">
+                              <select id="selectarea" name="selectarea" required="required" class="jsselectarea"
+                                style="margin-left: 15px;">
+                                {% if address is not None %}
+
+                                <option value="" selected="selected">{{address.area}}</option>
+
+                                {%else%}
+                                <option value="" disabled="disabled" selected="selected">Select Area</option>
+                                {%endif%}
+
+
+
+                              </select>
+                              <svg>
+                                <use xlink:href="#select-arrow-down"></use>
+                              </svg>
+                            </label>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputContact1" class="col-sm-2 col-form-label">Contact No</label>
+                            <div class="col-sm-10">
+                              <input type="tel" class="form-control" id="contact1" name="contact1"
+                                value="{{address.contact_1}}" required>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="inputContact2" class="col-sm-2 col-form-label">Alternative Contact No</label>
+                            <div class="col-sm-10">
+                              <input type="tel" class="form-control" id="contact2" name="contact2"
+                                value="{{address.contact_2}}">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="offset-sm-2 col-sm-10">
+                              <button type="submit" id="submitaddress" class="btn btn-danger">Submit</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <!-- /.tab-pane -->
+                    </div>
+
+                    <div class="tab-pane" id="appointments" style="display: none;overflow: auto;">
+                      {% if appointments %}
+                      <table class="table-fill">
+                        <thead>
+                          <tr>
+
+                            <th class="text-center" style="width:50px">Sr</th>
+                            <th class="text-center" style="width:50px">Appointment Id</th>
+                            <th class="text-center">Event</th>
+                            <th class="text-center">Place</th>
+                            <th class="text-center">Appointment Date</th>
+                            <th class="text-center">Appointment Time</th>
+                            <th class="text-center">Total Payment</th>
+                            <th class="text-center" style="width: 40px;">Booking Payment(Paid)</th>
+                            <th class="text-center" style="width: 40px;">Remaining Payment</th>
+                            <th class="text-center">Actions</th>
+
+
+                          </tr>
+                        </thead>
+                        <tbody class="table-hover">
+                          {% for appointment in appointments %}
+
+                          <tr>
+
+                            <td class="text-center">{{forloop.counter}}</td>
+                            <td class="text-center">{{appointment.appoint_id}}</td>
+                            <td class="text-center">{{appointment.event}}</td>
+                            <td class="text-center">{{appointment.location}}</td>
+                            <td class="text-center">{{appointment.date}}</td>
+                            <td class="text-center">{{appointment.time}}</td>
+                            <td class="text-center"><span
+                                style='font-family:Arial;'>&#8377;</span>{{appointment.total_payment}}</td>
+                            <td class="text-center"><span
+                                style='font-family:Arial;'>&#8377;</span>{{appointment.booking_payment}}</td>
+                            <td class="text-center"><span
+                                style='font-family:Arial;'>&#8377;</span>{{appointment.remaining_payment}}</td>
+
+                            <!--
+                            {% for amount in totalamount %}
+                            {% if forloop.counter == forloop.parentloop.counter %}
+                            <td class="text-center">&#8377;{{amount}}</td>
+                            {% endif %}
+                            {% endfor %}
+                            -->
+                            <td>
+                              <center>
+
+                                {% if appointment.event.event_name == "Pre-Wedding" or appointment.event.event_name == "Wedding" %}
+                                <button id="editappointment" class="jsbtnedit btn btn-primary" disabled>No Actions
+                                </button>
+                                {% else %}
+                                <a href="/appointment/editappointment-form/{{appointment.appoint_id}}" target="_blank">
+                                  <button id="editappointment" class="jsbtnedit btn btn-primary"><i
+                                      class="fa fa-pencil-alt" style="margin-right: 3px ;"> </i>Edit
+                                  </button>
+                                </a>
+
+                                {% endif %}
+
+
+
+                              </center>
+                            </td>
+                            <!--
+                            {%if appointment.payment_status == "Due"%}
+                            <td class="text-center">N/A</td>
+                              
+                            {%else%}
+                            {%if totalamount %}
+                            {% for amount in totalamount %}
+                              {% if amount != None %}
+                              <td class="text-center">&#8377;{{amount}}</td>
+                              {% endif %}
+                            {% endfor %}
+                          {%endif%}
+                            {%endif%}
+                            -->
+
+
+                          </tr>
+                          {%endfor%}
+                        </tbody>
+                      </table>
+                      {% else %}
+                      <h4> No Active Appointments Found </h4>
+                      {% endif %}
+                    </div>
+                    <div class="tab-pane" id="cancelledappointments" style="display: none;overflow: auto;">
+                      {% if cancelledappointments %}
+                      <table class="table-fill">
+                        <thead>
+                          <tr>
+
+                            <th class="text-center" style="width:50px">Sr</th>
+                            <th class="text-center" style="width:50px">Appointment Id</th>
+                            <th class="text-center">Event</th>
+                            <th class="text-center">Place</th>
+                            <th class="text-center">Appointment Date</th>
+                            <th class="text-center">Appointment Time</th>
+                            <th class="text-center">Cancelled On</th>
+                            <th class="text-center">Total Payment</th>
+                            <th class="text-center" style="width: 40px;">Booking Payment(Paid)</th>
+                            <th class="text-center" style="width: 40px;">Remaining Payment</th>
+                            <th class="text-center">Actions</th>
+
+
+                          </tr>
+                        </thead>
+                        <tbody class="table-hover">
+                          {% for appointment in cancelledappointments %}
+
+                          <tr>
+
+                            <td class="text-center">{{forloop.counter}}</td>
+                            <td class="text-center">{{appointment.appoint_id}}</td>
+                            <td class="text-center">{{appointment.event}}</td>
+                            <td class="text-center">{{appointment.location}}</td>
+                            <td class="text-center">{{appointment.date}}</td>
+                            <td class="text-center">{{appointment.time}}</td>
+                            <td class="text-center">{{appointment.cancelled_on}}</td>
+                            <td class="text-center"><span
+                                style='font-family:Arial;'>&#8377;</span>{{appointment.total_payment}}</td>
+                            <td class="text-center"><span
+                                style='font-family:Arial;'>&#8377;</span>{{appointment.booking_payment}}</td>
+                            <td class="text-center"><span
+                                style='font-family:Arial;'>&#8377;</span>{{appointment.remaining_payment}}</td>
+
+                            <!--
+                            {% for amount in totalamount %}
+                            {% if forloop.counter == forloop.parentloop.counter %}
+                            <td class="text-center">&#8377;{{amount}}</td>
+                            {% endif %}
+                            {% endfor %}
+                            -->
+                            <td>
+                              <center>
+
+                                <a href="/appointment/editappointment-form/{{appointment.appoint_id}}" target="_blank">
+                                  <button id="editappointment" class="btn btn-primary"><i class="fa fa-eye"
+                                      aria-hidden="true" style="margin-right: 3px;"></i>View
+                                  </button>
+                                </a>
+
+
+
+                              </center>
+                            </td>
+                            <!--
+                            {%if appointment.payment_status == "Due"%}
+                            <td class="text-center">N/A</td>
+                              
+                            {%else%}
+                            {%if totalamount %}
+                            {% for amount in totalamount %}
+                              {% if amount != None %}
+                              <td class="text-center">&#8377;{{amount}}</td>
+                              {% endif %}
+                            {% endfor %}
+                          {%endif%}
+                            {%endif%}
+                            -->
+
+
+                          </tr>
+                          {%endfor%}
+                        </tbody>
+                      </table>
+                      {% else %}
+                      <h4> No Cancelled Appointments Found </h4>
+                      {% endif %}
+                    </div>
+
+                    <div class="tab-pane" id="imagesid" style="display: none;">
+                      {% if images %}
+                      <table class="table-fill">
+                        <thead>
+                          <tr>
+
+                            <th class="text-center" style="width: 120px;">Sr</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Image</th>
+                            <th class="text-center">Payment Paid</th>
+                            <th class="text-center">Download</th>
+
+                          </tr>
+                        </thead>
+
+                        <tbody class="table-hover">
+                          {% for key,image in images.items %}
+                          <tr>
+
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td class="text-center">{{image.image_name}}</td>
+                            <td class="text-center"><img src="media/{{image.image_upload}}" style="width: 150px;"></td>
+                            <td class="text-center">&#8377;{{image.price}}</td>
+                            <td class="text-center"><a class="btn btn-primary btn-block"
+                                href="media/{{image.image_upload}}" download>Download</a>
+                              </a></td>
+                            {%endfor%}
+                          </tr>
+
+                        </tbody>
+
+                      </table>
+                      {%else%}
+                      <h4> No Images Found </h4>
+                      {% endif %}
+
+                    </div>
+                    <!-- /.tab-content -->
+                  </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer" style="text-align: center;">
+      <div class="float-right d-none d-sm-block">
+
+      </div>
+      <strong>Copyright &copy; 2021 <a href="/">Photostudioroom</a>.</strong> All rights reserved.
+    </footer>
+
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- jQuery -->
+  <script src="{% static 'assets/css/stockimages/contributor/plugins/jquery/jquery.min.js'%}"></script>
+  <!-- Bootstrap 4 -->
+  <script src="{% static 'assets/css/stockimages/contributor//plugins/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+  <!-- AdminLTE App -->
+  <script src="{% static 'assets/css/stockimages/contributor//dist/js/adminlte.min.js'%}"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="{% static 'assets/css/stockimages/contributor//dist/js/demo.js'%}"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+ Hello {{firstname}} {{lastname}},
+
+    Thank You For Registering on Photostudioroom as Customer, We are Glad to See You Here!, 
+    You Can Do Many Things On Our Website, 
+    From Booking Appointment For Photoshoot to Purchasing Stock Images and Even Earn Money By Uploading Images On Our Website. Learn More On Our Website,
+     Have a Nice Day!.
+              
+Regards,
+   
+  Photostudioroom 
+  

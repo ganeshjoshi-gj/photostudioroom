@@ -1,0 +1,406 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{%block title %} My Cart {%endblock title %}
+
+{% block css %}
+
+<link href="{% static 'assets/css/showcart/main.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/showcart/prettyphoto.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/showcart/price-range.css' %}" rel="stylesheet">
+<link href="{% static 'assets/css/showcart/responsive.css' %}" rel="stylesheet">
+<style>
+  .imagefit {
+
+    height: 225px;
+    width: 225px;
+    object-fit: cover;
+    max-height: 100%;
+    max-width: 100%;
+    display: block;
+    margin: auto auto;
+
+
+  }
+
+  .btn-border {
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: 0.3s;
+    line-height: normal;
+    color: #ef6603;
+    -webkit-animation-delay: 0.8s;
+    animation-delay: 0.8s;
+    margin-top: auto;
+    border: 2px solid #ef6603;
+    text-align: center;
+    width: auto;
+  }
+
+  .btn-border:hover {
+    cursor: pointer;
+    background: #ef6603;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .totalamount {
+    background: #ef6603;
+    ;
+    color: #fff;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+  }
+</style>
+<style>
+  table {
+    width: 50%;
+  }
+
+  table.fixed {
+    table-layout: fixed;
+  }
+
+  table.fixed td {
+    overflow: hidden;
+  }
+
+  .emptycart {
+    color: black;
+    font-size: 48px;
+    font-weight: 700;
+    font-family: "Raleway", sans-serif;
+    margin-top: 10%;
+    text-align: center;
+
+  }
+
+  .purchaseimgtext {
+
+    margin-top: 50px;
+    font-size: 28px;
+    font-weight: 500;
+    font-family: "Cambira", sans-serif;
+    text-align: center;
+  }
+
+  .gthtext {
+    font-size: 28px;
+    font-weight: 500;
+    font-family: "Cambira", sans-serif;
+    margin-bottom: 10%;
+    text-align: center;
+  }
+
+  .cemptyimg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+  }
+</style>
+
+<style>
+  /*
+For Image Fullscreen
+
+*/
+  /* Style the Image Used to Trigger the Modal */
+  .showfull {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .showfull:hover {
+    opacity: 0.7;
+  }
+
+  /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Black w/ opacity */
+  }
+
+  /* Modal Content (Image) */
+  .modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 550px;
+  }
+
+  /* Caption of Modal Image (Image Text) - Same Width as the Image */
+  #caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+  }
+
+  /* Add Animation - Zoom in the Modal */
+  .modal-content,
+  #caption {
+    animation-name: zoom;
+    animation-duration: 0.6s;
+  }
+
+  @keyframes zoom {
+    from {
+      transform: scale(0)
+    }
+
+    to {
+      transform: scale(1)
+    }
+  }
+
+  /* The Close Button */
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* 100% Image Width on Smaller Screens */
+  @media only screen and (max-width: 700px) {
+    .modal-content {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock css %}
+
+
+
+{% block js %}
+<script>
+  // Get the modal
+  function showFull(img) {
+    var modal = document.getElementById("myModal");
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+
+    modal.style.display = "block";
+    modalImg.src = img.src;
+    captionText.innerHTML = img.alt;
+
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+  }
+</script>
+
+
+<script>
+  /* For Managing Cart */
+  var usrfrmdb =
+    "{{ user.get_username }}" //Fetching Current Logged in Username From Database Via Django Template Variable
+  if (localStorage.getItem('usrnm') == null) //Is usrnm is not available
+  {
+    var usrnm = ""; //Then Create One
+  } else //else if already available
+  {
+    usrnm = JSON.parse(localStorage.getItem('usrnm')); //Then get it in this variable
+
+    if (usrnm !=
+      usrfrmdb
+    ) { //If USername in localStorage of Browser is not = to Username From Database(Which Shows Current Logged in User)
+
+      localStorage.clear(); //clearing localstorage if user is changed
+
+      usrnm = usrfrmdb;
+
+      localStorage.setItem('usrnm', JSON.stringify(
+        usrnm)); //Then Set localStorage username to Username From Database(Which is Currently Logged in User)
+    }
+
+  }
+
+  /* Cart System */
+  if (localStorage.getItem('imgincart') == null) { //Is imgincart array is not available
+
+    var imgincart = []; //Then Create one
+
+  } else { //else if already available
+    imgincart = JSON.parse(localStorage.getItem('imgincart')); //Then get it in this variable
+
+    document.getElementById('cartcounter').innerHTML = Object.keys(imgincart).length; //Updating cartcounter of navbar
+
+  }
+
+  $(document).ready(function () {
+    console.log("doc is ready")
+
+    $(".jscartdelete").on("click", function () {
+
+      console.log("You Entered Delete From Cart For Id: " + this.id)
+      $.ajax({
+
+        type: "POST",
+        url: "{% url 'RemoveCart' %}", //Send Post Request Here
+        data: { "removeitems": "true", "imageid": this.id, "csrfmiddlewaretoken": "{{csrf_token}}" }, //getitems will tell our view that we want items and not adding anything
+        success: function (response) { //If ajax request is succeed Then This Function Will be Called and Response Will Captured
+          console.log(response["imgid"])
+          window.location.reload();
+        },
+        error: function (response) { //if ajax request got failed then this function will run
+          console.log(response)
+        }
+
+
+      });
+    });
+
+  });
+
+</script>
+{% endblock js %}
+
+
+{% block body %}
+<main id="main">
+
+  {% if images %}
+  <section id="cart_items" style="margin-top:25px; text-align: center;">
+    <div class="container">
+      <div class="table-responsive cart_info">
+        <table class="table table-condensed">
+          <thead>
+            <tr class="cart_menu">
+              <td class="image">Image</td>
+              <td class="description">Image Name</td>
+              <td class="price">Price</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for image in images %}
+            <tr>
+              <td class="cart_product">
+                <img id="{{image.image_id}}" src="/media/{{image.image_thumb}}" alt="{{image.image_name}}" class="imagefit showfull"
+                  onclick="showFull(this)">
+              </td>
+              <td class="cart_description">
+                <h4><a href="">{{image.image_name}}</a></h4>
+                <p>{{image.description}}</p>
+              </td>
+              <td class="cart_price">
+                <p>&#8377;{{image.price}}</p>
+              </td>
+              <td class="cart_delete">
+                <a class="cart_quantity_delete jscartdelete" id="{{image.image_id}}"><i class="fa fa-times"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+
+        </table>
+
+      </div>
+      <!-- The Modal -->
+      <div id="myModal" class="modal">
+
+        <!-- The Close Button -->
+        <span class="close"> &times;</span>
+
+        <!-- Modal Content (The Image) -->
+        <img class="modal-content" id="img01">
+
+        <!-- Modal Caption (Image Text) -->
+        <div id="caption"></div>
+      </div>
+      <div class="table-responsive cart_info">
+        <table class="table table-condensed">
+          <thead>
+            <tr class="totalamount">
+
+              <td class="price" style="text-align: end;"> Total Amount <span style="margin-left: 30px;">
+                  &#8377;{{totalamount}}</span></td>
+              <td></td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="total_area">
+
+
+
+
+            <a href="payment" class="btn-border">Checkout</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--/#cart_items-->
+
+
+  {%else%}
+  <div id="emptycartcontainer">
+    <h2 class="emptycart"> Your Cart is Currently Empty </h2>
+    <img src="{% static 'assets/svg/cart/cartempty.svg' %}" class="cemptyimg">
+    <h5 class="purchaseimgtext"> <a href="/stockimages">Purchase Images </a> </h5>
+    <h5 class="gthtext"> <a href="/">Go to Home </a> </h5>
+  </div>
+  {%endif%}
+
+
+
+
+
+
+</main><!-- End #main -->
+
+{% endblock body %}

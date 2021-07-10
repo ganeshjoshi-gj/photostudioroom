@@ -1,0 +1,135 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{%block title %} Service Details {%endblock title %}
+
+
+{% block css %}
+<style>
+  .jshoverscale:hover {
+    color: chocolate;
+  }
+
+  .jstitlehover:hover {
+    font-size: 150% !important;
+    transition: 0.5s ease-in-out;
+    text-decoration: underline;
+
+
+  }
+  .btn-learn-more {
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 12px 32px;
+  border-radius: 5px;
+  transition: 0.3s;
+  line-height: 1;
+  color: #ef6603;
+  -webkit-animation-delay: 0.8s;
+  animation-delay: 0.8s;
+  margin-top: 6px;
+  border: 2px solid #ef6603;
+}
+
+.btn-learn-more:hover {
+  background: #ef6603;
+  color: #fff;
+  text-decoration: none;
+}
+</style>
+
+{% endblock css %}
+{% block body %}
+
+
+<main id="main">
+
+  <!-- ======= About Section ======= -->
+  <section id="about" class="about">
+    <div class="container mt-5">
+
+      <div class="section-title" data-aos="zoom-out">
+
+
+        <br>
+        <h2>Appointment Booking</h2>
+        <!--Changed This-->
+        <p>Service Details</p>
+        <!--Changed This-->
+      </div>
+
+      <div class="row content" data-aos="fade-up">
+        <div class="col-lg-6" style="margin-top:-30px;">
+          <p class="jstitlehover" style="font-size: 20px;transition: 0.5s ease-in-out;">
+            Events
+          </p>
+          
+          <hr>
+          <p> Events Available On Photostudioroom </p>
+          <ul>
+            {% for event in events %}
+            <li class="jshoverscale"><i class="ri-check-double-line"></i> {{event.event_name}}</li>
+           
+              {% endfor %}
+          </ul>
+
+
+        </div>
+        <img src="{% static 'assets/img/appointment/ourservices.png' %}"
+          style="float: right; width: 50%; height: auto;margin-top: -10px;">
+        <img src="{% static 'assets/img/appointment/perpkg.png' %}" style="float: left; width: 50%; height: auto;margin-top: 40px;">
+        <div class="col-lg-6 pt-4 pt-lg-0" style="margin-top:5%;">
+
+
+          <p class="jstitlehover" style="font-size: 20px;transition: 0.5s ease-in-out;margin-top: -20px;">
+            Packages vs Per Photos
+          </p>
+          <hr>
+          <ul>
+            <li class="jshoverscale"><i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> Packages Contains Wedding and Pre-Wedding Events. </li>
+            <li class="jshoverscale"><i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> You Have to Select Days For Packages and Photo Quantity If Wedding or Pre-Wedding is Not Selected. </li>
+            <li class="jshoverscale"> <i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> In Packages You Can Also Select Gears, Like Only Cameras Or Cameras + Drone.</li>            
+            <li class="jshoverscale"> <i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> If You Select Events Which is In Packages Then You Have to Visit Studio For Discussion. </li>
+            <li class="jshoverscale"> <i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i>If Event is Not in Packages Then The Photographer Will Visit You at Your Desired Place. </li>
+          </ul>
+
+          
+
+        </div>
+          
+        <div class="col-lg-6 pt-4 pt-lg-0" style="margin-top:5%;">
+
+
+          <p class="jstitlehover" style="font-size: 20px;transition: 0.5s ease-in-out;">
+            Gears
+          </p>
+          <hr>
+          <ul>
+            <li class="jshoverscale"><i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> We Have Professional Gears Like Camera,Drones,Gimbles and Tripods.</li>
+            <li class="jshoverscale"><i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> We Have 4K Cameras With Experts to Use Them. </li>
+            <li class="jshoverscale"> <i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> We Also Have Drones Which Can Record 4K Videos, Experts are There to Use Them. </li>
+            <li class="jshoverscale"> <i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> We Use Gimbles So You Get Smooth and Buttery Videos. </li>
+            <li class="jshoverscale"> <i class="fa fa-star" aria-hidden="true" style="color: #ef6603;"></i> We've
+              Professional Employees So You will Get a Great Experience. </li>
+          </ul>
+
+          
+
+        </div>
+        <img src="{% static 'assets/img/appointment/gears.png' %}" style="float: left; width: 50%; height: auto;margin-top: 20px;">
+      </div>
+      <center>
+      <div style="margin-top: 80px;">
+        <p> Click The Button Shown Below to Go to The Appointment Form.</p>
+      <a href="appointment-form" class="btn-learn-more">Book an Appointment Now</a>
+      </div>
+    </center>
+    </div>
+  </section><!-- End About Section -->
+
+
+</main><!-- End #main -->
+
+{% endblock body %}

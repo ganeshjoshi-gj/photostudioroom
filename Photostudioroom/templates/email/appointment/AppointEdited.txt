@@ -1,0 +1,56 @@
+  Hello {{firstname}} {{lastname}},
+
+  You Have Made Changes in Your Appointment, So The Photographer Will be Reassigned to You,
+  You Don't Have to Pay Booking Payment Again, but Your Total Payment May be Changed, 
+  It Depends On Your Selected Event,Photos Quantity and Place.
+   
+  
+
+  Here Are The Updated Details Of Your Appointment: 
+      Appointment Id: {{appoint.appoint_id}}
+      Appointment Date: {{appoint.date}}
+      Appointment Time: {{appoint.time}}
+      Event: {{appoint.event.event_name}}
+      Place: {{appoint.location.location_name}}
+
+      {% if appoint.photo_quantity != None %}
+      Photos Quantity: {{appoint.photo_quantity}}
+      Booking Payment: {{appoint.booking_payment}}
+      Total Payment: {{appoint.total_payment}}
+      Remaining Payment: {{appoint.remaining_payment}}
+
+      {% else %}
+      Service: {{appoint.service}}
+
+      {% if appoint.gears != None %}
+      Gears: {{appoint.gears}}
+      {% endif %}
+      
+      Booking Payment: {{appoint.booking_payment}}
+      
+      {% endif %}
+
+  {% if appoint.photo_quantity != None %}
+  Event Address: 
+  
+      {{address.address_line1}} {{address.address_line2}}, {{address.area.area_name}}, {{address.city.city_name}}, {{address.state.state_name}}
+
+    {% else %}
+  Studio Address
+  {% endif %}
+  
+  Your Contact Details:
+  
+    Contact No: {{address.contact_1}}
+    {% if address.contact_2 != None %}
+
+    Alternative Contact No: {{address.contact_2}}
+
+    {% endif %}
+
+  
+    You Can Also View The Details of Your Appointment in Your Profile.
+  
+  
+  Regards,
+  Photostudioroom 

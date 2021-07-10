@@ -1,0 +1,20 @@
+
+
+    
+  Hello {{firstname}} {{lastname}},
+       
+
+    Thank Your For Uploading Images On Photostudioroom,     
+    We're Glad to Have You as a Contributor,     
+    Please Continue Your Journey With us,     
+
+    This Mail is Sent to You to Inform You That We've Paid The Monthly Payment to You Earned From Your Uploaded Images,     
+    If You Didn't Get The Payment Within 24 Hours, Please Contact Us.     
+  
+       
+You Can Check Your Earning in Your Dashboard.
+
+       
+  Regards,
+       
+  Photostudioroom 

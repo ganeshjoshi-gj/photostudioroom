@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Payment | Photostudioroom</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/payment/payment.css' %}">
+    <link href="{% static 'assets/img/PSRicon.jpg' %}" rel="icon">
+    <style>
+        /*-----------------------------------------------------------------------*/
+        /**===== circle_square =====*/
+        #circle_square {
+            display: block;
+            position: absolute;
+            top: 160px;
+            left: 510px;
+            height: 36px;
+            width: 36px;
+            margin: -15px 0 0 -25px;
+
+        }
+
+        #circle_square span {
+            width: 15px;
+            height: 15px;
+            background-color: #000;
+            display: inline-block;
+            background-color: #18bc9c;
+            -webkit-animation: square2 2s infinite ease-in-out both;
+            animation: square2 2s infinite ease-in-out both;
+        }
+
+        #circle_square span:nth-child(1) {
+            -webkit-animation: preloader_2_1 1.5s infinite ease-in-out;
+            animation: preloader_2_1 1.5s infinite ease-in-out;
+        }
+
+        #circle_square span:nth-child(2) {
+            left: 20px;
+            -webkit-animation: preloader_2_2 1.5s infinite ease-in-out;
+            animation: preloader_2_2 1.5s infinite ease-in-out;
+        }
+
+        #circle_square span:nth-child(3) {
+            top: 0px;
+            -webkit-animation: preloader_2_3 1.5s infinite ease-in-out;
+            animation: preloader_2_3 1.5s infinite ease-in-out;
+        }
+
+        #circle_square span:nth-child(4) {
+            top: 0px;
+            left: 20px;
+            -webkit-animation: preloader_2_4 1.5s infinite ease-in-out;
+            animation: preloader_2_4 1.5s infinite ease-in-out;
+        }
+
+        @-webkit-keyframes preloader_2_1 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(-20px) translateY(-10px) rotate(-180deg);
+                transform: translateX(-20px) translateY(-10px) rotate(-180deg);
+                border-radius: 50%;
+                background: #3498db;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @keyframes preloader_2_1 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(-20px) translateY(-10px) rotate(-180deg);
+                transform: translateX(-20px) translateY(-10px) rotate(-180deg);
+                border-radius: 50%;
+                background: #3498db;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @-webkit-keyframes preloader_2_2 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(20px) translateY(-10px) rotate(180deg);
+                transform: translateX(20px) translateY(-10px) rotate(180deg);
+                border-radius: 50%;
+                background: #f1c40f;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @keyframes preloader_2_2 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(20px) translateY(-10px) rotate(180deg);
+                transform: translateX(20px) translateY(-10px) rotate(180deg);
+                border-radius: 50%;
+                background: #f1c40f;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @-webkit-keyframes preloader_2_3 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(-20px) translateY(10px) rotate(-180deg);
+                transform: translateX(-20px) translateY(10px) rotate(-180deg);
+                border-radius: 50%;
+                background: #2ecc71;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @keyframes preloader_2_3 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(-20px) translateY(10px) rotate(-180deg);
+                transform: translateX(-20px) translateY(10px) rotate(-180deg);
+                border-radius: 50%;
+                background: #2ecc71;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @-webkit-keyframes preloader_2_4 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(20px) translateY(10px) rotate(180deg);
+                transform: translateX(20px) translateY(10px) rotate(180deg);
+                border-radius: 50%;
+                background: #e74c3c;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @keyframes preloader_2_4 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(20px) translateY(10px) rotate(180deg);
+                transform: translateX(20px) translateY(10px) rotate(180deg);
+                border-radius: 50%;
+                background: #e74c3c;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+        }
+
+        /** END of circle_square */
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            
+            
+
+                setTimeout(function () {
+                    $("#paymentprocesstext").text("Your Payment is Successful");
+                    $("#displayestimate").hide();
+                    $("#successdiv").show();
+                    redirectToHome();
+                }, 5000);
+            
+        });
+        function redirectToHome(){
+            setTimeout(function () {
+                    window.location.href = '/'
+                   
+                }, 8000);
+
+        }
+    </script>
+</head>
+
+<body style="background:#f6f6f6;">
+    <main class="page payment-page">
+        <section class="payment-form dark">
+            <div class="container">
+                <div class="block-heading">
+                    <h2 id="paymentprocesstext">Appointment Booking Payment is In Process</h2>
+
+                </div>
+                <div id="displayestimate">
+                    <div id="circle_square">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <h2 id="waittext" style="margin-top: 10px;margin-left: 350px;">Please Wait..<br>
+                        We're Processing Your Payment</h2>
+                </div>
+            </div>
+            <div id="successdiv" style="display: none;">
+            <center> <img id="successimg" src="{%static 'assets/img/payment/paymentsuccess.jpg' %}" style="width: 40%; height: auto;">
+            </center>
+            <p style="text-align: center; margin-top: 5px;">Thank You For Your Payment. An Automated Payment Receipt Will be Sent to Your Registered Email.</p>
+            <p style="text-align: center; margin-top: 35px;">Redirecting You to the Home Page....</p>
+        </div>
+        </section>
+
+    </main>
+</body>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,18 @@
+Hello, {{firstname}} {{lastname}}
+
+Thank You For Booking Appointment For Photoshoot on Photostudioroom,
+  We've Received Your Request, You Have Booked an Appointment to Visit Our Studio,
+  You Can Come at Our Studio on Your Selected Date and Time.
+
+
+Here Are The Details Of Your Appointment:
+
+      Appointment Id: {{id}}
+      Appointment Date: {{date}}
+      Appointment Time: {{time}}
+      Event: {{event}}
+      Place: {{place}}
+  
+
+Regards,
+    Photostudioroom

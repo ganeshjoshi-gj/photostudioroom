@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment | Photostudioroom</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'assets/payment/payment.css' %}">
+  <link href="{% static 'assets/img/PSRicon.jpg' %}" rel="icon">
+</head>
+<body>
+  <main class="page payment-page">
+    <section class="payment-form dark">
+      <div class="container">
+        <div class="block-heading">
+          <h2>Images Payment</h2>
+          <p>Please Pay Your Images Payment By Using Your Debit Card.</p>
+        </div>
+        
+        {% if iscartpurchase %}
+        <form method="POST" action="/stockimages/payment/authenticate">
+        
+        {% else %}
+        <form method="POST" action="/stockimages/payment/auth/{{image.image_id}}">
+        {% endif %}
+          {% csrf_token %}
+          <div>
+            <img src="{% static 'assets/img/appointment/psrpaybevel.png' %}" style="width: 50%;height: auto;float: left;margin-right: auto;margin-top: -30px;margin-left: -5px;"> 
+          </div>
+          <div class="products">
+                  
+            <h3 class="title">Checkout</h3>
+            <div class="total">Total<span class="price">&#8377;{{totalamount}}</span></div>
+          </div>
+          <div class="card-details">
+            <h3 class="title">Debit Card Details</h3>
+            <div class="row">
+              <div class="form-group col-sm-7">
+                <label for="card-holder">Card Holder</label>
+                <input id="card-holder" name="card-holder" type="text" class="form-control" placeholder="Card Holder" aria-label="Card Holder" aria-describedby="basic-addon1" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" required>
+              </div>
+              <div class="form-group col-sm-5">
+                <label for="">Expiration Date</label>
+                <div class="input-group expiration-date">
+                  <input type="number" class="form-control" name= "expmm" placeholder="MM" aria-label="MM" aria-describedby="basic-addon1" min="1" max="12" maxlength="2" required>
+                  <span class="date-separator">/</span>
+                  <input type="number" class="form-control" name="expyy" placeholder="YY" aria-label="YY" aria-describedby="basic-addon1" min="21" maxlength="2" required>
+                </div>
+              </div>
+              <div class="form-group col-sm-8">
+                <label for="card-number">Card Number</label>
+                <input id="card-number" name="card-number" type="text" class="form-control" placeholder="Card Number" aria-label="Card Holder" minlength="13" aria-describedby="basic-addon1" required>
+              </div>
+              <div class="form-group col-sm-4">
+                <label for="cvc">CVV</label>
+                <input id="cvc" name="cvc" type="password" class="form-control" placeholder="CVV" aria-label="Card Holder" aria-describedby="basic-addon1" maxlength="4" required>
+              </div>
+              <div class="form-group col-sm-12">
+                <input type="submit" class="btn btn-primary btn-block" value="Proceed">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

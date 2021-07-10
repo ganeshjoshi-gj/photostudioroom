@@ -1,0 +1,723 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{%block title %} Stock Images {%endblock title %}
+
+{% block css %}
+<style>
+    #search {
+        transition: all 0.5s;
+        transition: all 0.5s;
+        background: rgb(49, 51, 70);
+    }
+
+    .card {
+        border: none;
+        background: #eee
+    }
+
+    .search {
+        width: 100%;
+        margin-bottom: auto;
+        margin-top: 20px;
+        height: 50px;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 5px
+    }
+
+    .search-input {
+        color: white;
+        border: 0;
+        outline: 0;
+        background: none;
+        width: 0;
+        margin-top: 5px;
+        caret-color: transparent;
+        line-height: 20px;
+        transition: width 0.4s linear
+    }
+
+    .search .search-input {
+        padding: 0 10px;
+        width: 100%;
+        caret-color: #536bf6;
+        font-size: 19px;
+        font-weight: 300;
+        color: black;
+        transition: width 0.4s linear
+    }
+
+    .search-icon {
+        height: 34px;
+        width: 34px;
+        float: right;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        background-color: rgba(42, 44, 57, 0.9);
+        font-size: 10px;
+        bottom: 30px;
+        position: relative;
+        border-radius: 5px
+    }
+
+    .search-icon:hover {
+        color: #fff !important
+    }
+
+    a:link {
+        text-decoration: none
+    }
+
+    .card-inner {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, .125);
+        border-radius: .25rem;
+        border: none;
+        cursor: pointer;
+        transition: all 2s
+    }
+
+    .card-inner:hover {
+        transform: scale(1.1)
+    }
+
+    .mg-text span {
+        font-size: 12px
+    }
+
+    .mg-text {
+        line-height: 14px
+    }
+
+    /*Manually Added*/
+    .imagefit {
+
+        height: 250px;
+        object-fit: contain;
+        max-height: 100%;
+        max-width: 100%;
+        display: block;
+        margin: auto auto;
+
+
+    }
+
+    .btn-border {
+        font-family: "Raleway", sans-serif;
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 1px;
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: 0.3s;
+        line-height: 1;
+        color: #ef6603;
+        -webkit-animation-delay: 0.8s;
+        animation-delay: 0.8s;
+        margin-top: 6px;
+        border: 2px solid #ef6603;
+        text-align: center;
+        width: 140px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .btn-border:hover {
+        cursor: pointer;
+        background: #ef6603;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .added-to-cart {
+        font-family: "Raleway", sans-serif;
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 1px;
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: 0.3s;
+        line-height: 1;
+        color: gray;
+        -webkit-animation-delay: 0.8s;
+        animation-delay: 0.8s;
+        margin-top: 6px;
+        border: 2px solid gray;
+        text-align: center;
+        width: 170px;
+        ;
+    }
+
+    .added-to-cart:hover {
+        background: gray;
+        color: #fff;
+        text-decoration: none;
+
+    }
+</style>
+<style>
+    div.gallery {
+        border: 1px solid #ccc;
+    }
+
+    div.gallery:hover {
+        border: 1px solid #777;
+    }
+
+    div.gallery img {
+        width: 100%;
+        height: auto;
+    }
+
+    div.desc {
+        padding: 15px;
+        text-align: center;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .responsive {
+        padding: 0 6px;
+        float: left;
+        width: 24.99999%;
+    }
+
+    @media only screen and (max-width: 700px) {
+        .responsive {
+            width: 49.99999%;
+            margin: 6px 0;
+        }
+    }
+
+    @media only screen and (max-width: 500px) {
+        .responsive {
+            width: 100%;
+        }
+    }
+
+    .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'assets/css/stockimages/popupimage.css' %}">
+{% endblock css %}
+
+{% block js %}
+<script>
+    /*TO Display Image in Full View*/
+    function onClick(element) {
+        document.getElementById("img01").src = element.src;
+        document.getElementById("modal01").style.display = "grid";
+        var imgid = element.id;
+        var URL = "{% url 'StockHome' %}";
+        var data = { 'imgviewinc': '1', 'imageid': String(imgid), "csrfmiddlewaretoken": "{{csrf_token}}" };
+        $.post(URL, data);
+
+    }
+
+    /* To Increase Like Of an Image on Click Of Like Button Click WIthout Reloading The Page */
+
+    /* to increase likes of image  */
+
+
+
+
+    function incLikes(element) { //When We Click Like Button This Function WIll Be Called
+        /*Implement Later*/
+
+        var imgid = element.id;
+        var imgidasdjango = imgid.slice(4)
+
+        var atagsflikes = document.getElementsByClassName("cartbtn"); //Getting all the a tags which Are Add To Cart Buttons
+        var imgidsflikes = [] //Blank array to store only ids of these a tags
+        for (let i = 0; i < atagsflikes.length; i++) {
+            imgidsflikes.push(atagsflikes[i].id) //getting ids of each a tag
+            console.log(imgidsflikes)
+        }
+
+        /* AJAX CALL FOR INCREASING/DECREASING LIKES */
+        $.ajax({
+
+            type: "POST",
+            url: "{% url 'StockHome' %}", //Send Post Request Here
+            data: { 'imglikeinc': '1', "getalllikesfrminc": "true", "imgidsforlikes": JSON.stringify(imgidsflikes), 'imageid': String(imgidasdjango), "csrfmiddlewaretoken": "{{csrf_token}}" }, //getitems will tell our view that we want items and not adding anything
+            success: function (response) { //If ajax request is succeed Then This Function Will be Called and Response Will Captured
+                '{% if user.is_authenticated == False %}'
+                var decide = false;
+                '{%else%}'
+                var decide = true;
+                '{%endif%}'
+
+
+                if (!decide) {
+                    alert("To Like an Image You Have to Log in")
+                    window.location.href = "/login"
+
+                }
+                else {
+                    $(element).find('img').toggle(80, 'linear'); //Change Unliked Button to Liked Button and Vice Versa.
+
+
+                    if (localStorage.getItem('lscuruserlikedimgs') == null) //Is lslikesforimage not available
+                    {
+                        var lslikesforimgs = [];
+                        lslikesforimgs = imgidasdjango; //Then Create One
+                    } else //else if already available
+                    {
+                        lslikesforimgs = JSON.parse(localStorage.getItem('lscuruserlikedimgs')); //Then get it in this variable
+                    }
+                    localStorage.setItem('lscuruserlikedimgs', JSON.stringify(
+                        lslikesforimgs));
+
+                    console.log("Calling inclikesforimage()")
+                    var imgwlikes = response["imgswlikes"]
+
+                    for (var key in imgwlikes) {
+                        let imgid = key;
+                        let likes = imgwlikes[key];
+
+                        if (localStorage.getItem('lstotallikesforimgs') == null) //Is lslikesforimgs is not available
+                        {
+                            var totallikes = {}; //make a dict
+                            totallikes[imgid] = likes; //Then set 0 likes for this current img
+                        } else //else if already available
+                        {
+                            totallikes = JSON.parse(localStorage.getItem('lstotallikesforimgs')); //Then get dict in this variable
+                            totallikes[imgid] = likes;
+                        }
+                        localStorage.setItem('lstotallikesforimgs', JSON.stringify(
+                            totallikes));
+
+
+
+                        totallikes = JSON.parse(localStorage.getItem('lstotallikesforimgs')); //Then get dict in this variable
+
+
+                        for (var key in totallikes) {
+                            imgid = "#actuallikes" + imgid; //convert django imageid to likebutton id
+                            let likecount = likes; //getting likecount from the dictionary for current image
+                            console.log(likecount)
+                            $(imgid).text(String(likecount)); //Setting Current Like Count For Current Image
+                        }
+
+                    }
+                }
+
+            },
+            error: function (response) { //if ajax request got failed then this function will run
+                console.log(response)
+            }
+        });
+    }
+
+    /* ON PAGE LOAD UPDATE LIKES OF IMAGES ACCORDING TO CURRENT USER */
+    $(document).ready(function () {
+        var atagsflikes = document.getElementsByClassName("cartbtn"); //Getting all the a tags which Are Add To Cart Buttons
+        var imgidsflikes = [] //Blank array to store only ids of these a tags
+        for (let i = 0; i < atagsflikes.length; i++) {
+            imgidsflikes.push(atagsflikes[i].id) //getting ids of each a tag
+            console.log(imgidsflikes)
+        }
+
+        $.ajax({
+
+            type: "POST",
+            url: "{% url 'StockHome' %}", //Send Post Request Here
+            data: { "getlikes": "true", "imgidsforlikes": JSON.stringify(imgidsflikes), "csrfmiddlewaretoken": "{{csrf_token}}" }, //getitems will tell our view that we want items and not adding anything
+            success: function (response) { //If ajax request is succeed Then This Function Will be Called and Response Will Captured
+                console.log("AJAX CALLED ON LOAD");
+
+                var imageslikedbyuser = response["imageslikedbyuser"]
+                console.log("imageslikedbyuser: " + imageslikedbyuser)
+                try {
+                    for (var i = 0; i < imageslikedbyuser.length; i++) {
+
+                        let imgid = "#" + "likedbtn" + imageslikedbyuser[i];
+                        let himgid = "#" + "likebtn" + imageslikedbyuser[i];
+                        $(imgid).show();
+                        $(himgid).hide();
+
+                    }
+                } catch (e) { };
+
+
+            },
+            error: function (response) { //if ajax request got failed then this function will run
+                console.log(response)
+            }
+
+
+        });
+    });
+
+    $(document).ready(function () {
+        var atagsflikes = document.getElementsByClassName("cartbtn"); //Getting all the a tags which Are Add To Cart Buttons
+        var imgidsflikes = [] //Blank array to store only ids of these a tags
+        for (let i = 0; i < atagsflikes.length; i++) {
+            imgidsflikes.push(atagsflikes[i].id) //getting ids of each a tag
+            console.log(imgidsflikes)
+        }
+        $.ajax({
+
+            type: "POST",
+            url: "{% url 'StockHome' %}", //Send Post Request Here
+            data: { "gettotallikes": "true", "imgidsforlikes": JSON.stringify(imgidsflikes), "csrfmiddlewaretoken": "{{csrf_token}}" }, //getitems will tell our view that we want items and not adding anything
+            success: function (response) { //If ajax request is succeed Then This Function Will be Called and Response Will Captured
+                console.log("AJAX CALLED ON LOAD");
+                var imgwlikes = response["imgswlikes"]
+
+                for (var key in imgwlikes) {
+                    let imgid = key;
+                    let likes = imgwlikes[key];
+
+                    if (localStorage.getItem('lstotallikesforimgs') == null) //Is lslikesforimgs is not available
+                    {
+                        var totallikes = {}; //make a dict
+                        totallikes[imgid] = likes; //Then set 0 likes for this current img
+                    } else //else if already available
+                    {
+                        totallikes = JSON.parse(localStorage.getItem('lstotallikesforimgs')); //Then get dict in this variable
+                        totallikes[imgid] = likes;
+                    }
+                    localStorage.setItem('lstotallikesforimgs', JSON.stringify(
+                        totallikes));
+
+                    console.log("Calling inclikesforimage()")
+                    var imgwlikes = response["imgswlikes"]
+
+                    for (var key in imgwlikes) {
+                        let imgid = key;
+                        let likes = imgwlikes[key];
+
+                        if (localStorage.getItem('lstotallikesforimgs') == null) //Is lslikesforimgs is not available
+                        {
+                            var totallikes = {}; //make a dict
+                            totallikes[imgid] = likes; //Then set 0 likes for this current img
+                        } else //else if already available
+                        {
+                            totallikes = JSON.parse(localStorage.getItem('lstotallikesforimgs')); //Then get dict in this variable
+                            totallikes[imgid] = likes;
+                        }
+                        localStorage.setItem('lstotallikesforimgs', JSON.stringify(
+                            totallikes));
+
+
+
+                        totallikes = JSON.parse(localStorage.getItem('lstotallikesforimgs')); //Then get dict in this variable
+
+
+                        for (var key in totallikes) {
+                            imgid = "#actuallikes" + imgid; //convert django imageid to likebutton id
+                            let likecount = likes; //getting likecount from the dictionary for current image
+                            console.log(likecount)
+                            $(imgid).text(String(likecount)); //Setting Current Like Count For Current Image
+                        }
+
+                    }
+
+                }
+                /*
+                var imageslikedbyuser = response["imageslikedbyuser"]
+                console.log("imageslikedbyuser: "+imageslikedbyuser)
+                for (var i = 0; i < imageslikedbyuser.length; i++) {
+                  console.log("imageslikedbyuser: "+imageslikedbyuser[i])
+              
+                  inclikesForImage(imageslikedbyuser[i])
+              
+              
+                  let imgid = "#" + "likedbtn" + imageslikedbyuser[i];
+                  let himgid = "#" + "likebtn" + imageslikedbyuser[i];
+                  $(imgid).show();
+                  $(himgid).hide();
+              
+                }*/
+
+
+            },
+            error: function (response) { //if ajax request got failed then this function will run
+                console.log(response)
+            }
+
+
+        });
+
+    });
+
+    //UPDATE ALL THE LIKES ON PAGE LOAD
+    $(document).ready(function () {
+        var atagsflikes = document.getElementsByClassName("cartbtn"); //Getting all the a tags which Are Add To Cart Buttons
+        var imgidsflikes = [] //Blank array to store only ids of these a tags
+        for (let i = 0; i < atagsflikes.length; i++) {
+            imgidsflikes.push(atagsflikes[i].id) //getting ids of each a tag
+            console.log(imgidsflikes)
+        }
+
+        $.ajax({
+
+            type: "POST",
+            url: "{% url 'StockHome' %}", //Send Post Request Here
+            data: { "gettotallikes": "true", "imgidsforlikes": JSON.stringify(imgidsflikes), "csrfmiddlewaretoken": "{{csrf_token}}" }, //getitems will tell our view that we want items and not adding anything
+            success: function (response) { //If ajax request is succeed Then This Function Will be Called and Response Will Captured
+                console.log("AJAX CALLED ON LOAD");
+                var imgwlikes = response["imgswlikes"]
+
+                for (var key in imgwlikes) {
+                    let imgid = key;
+                    let likes = imgwlikes[key];
+
+                    if (localStorage.getItem('lstotallikesforimgs') == null) //Is lslikesforimgs is not available
+                    {
+                        var totallikes = {}; //make a dict
+                        totallikes[imgid] = likes; //Then set 0 likes for this current img
+                    } else //else if already available
+                    {
+                        totallikes = JSON.parse(localStorage.getItem('lstotallikesforimgs')); //Then get dict in this variable
+                        totallikes[imgid] = likes;
+                    }
+                    localStorage.setItem('lstotallikesforimgs', JSON.stringify(
+                        totallikes));
+
+                    console.log("Calling inclikesforimage()")
+                    var imgwlikes = response["imgswlikes"]
+
+                    for (var key in imgwlikes) {
+                        let imgid = key;
+                        let likes = imgwlikes[key];
+
+                        if (localStorage.getItem('lstotallikesforimgs') == null) //Is lslikesforimgs is not available
+                        {
+                            var totallikes = {}; //make a dict
+                            totallikes[imgid] = likes; //Then set 0 likes for this current img
+                        } else //else if already available
+                        {
+                            totallikes = JSON.parse(localStorage.getItem('lstotallikesforimgs')); //Then get dict in this variable
+                            totallikes[imgid] = likes;
+                        }
+                        localStorage.setItem('lstotallikesforimgs', JSON.stringify(
+                            totallikes));
+
+
+
+                        totallikes = JSON.parse(localStorage.getItem('lstotallikesforimgs')); //Then get dict in this variable
+
+
+                        for (var key in totallikes) {
+                            imgid = "#actuallikes" + imgid; //convert django imageid to likebutton id
+                            let likecount = likes; //getting likecount from the dictionary for current image
+                            console.log(likecount)
+                            $(imgid).text(String(likecount)); //Setting Current Like Count For Current Image
+                        }
+
+                    }
+
+                }
+                /*
+                var imageslikedbyuser = response["imageslikedbyuser"]
+                console.log("imageslikedbyuser: "+imageslikedbyuser)
+                for (var i = 0; i < imageslikedbyuser.length; i++) {
+                  console.log("imageslikedbyuser: "+imageslikedbyuser[i])
+        
+                  inclikesForImage(imageslikedbyuser[i])
+        
+        
+                  let imgid = "#" + "likedbtn" + imageslikedbyuser[i];
+                  let himgid = "#" + "likebtn" + imageslikedbyuser[i];
+                  $(imgid).show();
+                  $(himgid).hide();
+        
+                }*/
+
+
+            },
+            error: function (response) { //if ajax request got failed then this function will run
+                console.log(response)
+            }
+
+
+        });
+    });
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        $.ajax({
+
+            type: "POST",
+            url: "{% url 'AddToCart' %}", //Send Post Request Here
+            data: { "getitems": "true", "csrfmiddlewaretoken": "{{csrf_token}}" }, //getitems will tell our view that we want items and not adding anything
+            success: function (response) { //If ajax request is succeed Then This Function Will be Called and Response Will Captured
+                try {
+                    document.getElementById('cartcounter').innerHTML = response["cartcount"]; //Updating cartcounter of navbar
+                    var imageidsfromview = response["imageids"]; //Which is ony in number for js we have to add prefix 'img'
+                    console.log(imageidsfromview)
+                    var imgidsforjs = [] //js img ids will be store in this array
+
+                    for (var i = 0; i < imageidsfromview.length; i++) { //getting ids one by one
+                        imgidsforjs.push("img" + String(imageidsfromview[i]))//and adding prefix 'img'
+                    }
+                    console.log(imgidsforjs.length)
+                    for (var i = 0; i < imgidsforjs.length; i++) { //for every image(which already in cart)
+                        console.log(imgidsforjs[i])
+                        console.log(response["cartcount"])
+                        if (response["cartcount"] != 0) {
+                            try {
+                                var element = document.getElementById(imgidsforjs[i]); //getting each element in this variable
+                                element.style.pointerEvents = "none"; //setting them as addedtocart button
+                                element.style.cursor = "default";
+                                element.innerText = "Added To Cart";
+                                element.classList.remove("btn-border");
+                                element.classList.add("added-to-cart")
+                            } catch (e) {//If Any error occurs,
+                                continue //Then Just Continue
+                                //this exception will occur when we are in different category page
+                                /*
+                                For Example,
+                                If we are in animals category page we added some images,
+                                now we visit birds page then this for loop will try to disable images which are from animals category
+                                but they are not available on th page as we are in birds page, at that time error will occur,
+                                so we will catch it and tell it to skip that image and go for the next one as simple as that.
+                                */
+                            }
+                        }
+                    }
+                } catch (e) { }
+            },
+            error: function (response) { //if ajax request got failed then this function will run
+                console.log(response)
+            }
+
+
+        });
+
+
+
+        $(".cartbtn").on("click", function () { //When Someone Clicks Add To Cart Button
+
+            var idofimg = this.id.toString(); //get id of that a tag(id of an image)
+            $.ajax({
+
+                type: 'POST',
+                url: "{% url 'AddToCart' %}",
+                data: { "additems": 'true', "imgidfrmajax": idofimg, "csrfmiddlewaretoken": "{{csrf_token}}" },
+                success: function (response) {
+                    console.log(response["cartcount"])
+                    if (response["unknownuser"] == 'true') {
+                        window.location.href = '/login'
+                    }
+                    else if (response["cartcount"] > 0 || response["cartcount"] != undefined) {
+                        try {
+                            var element = document.getElementById(idofimg);
+                            element.style.pointerEvents = "none";
+                            element.style.cursor = "default";
+                            element.innerText = "Added To Cart";
+                            element.classList.remove("btn-border");
+                            element.classList.add("added-to-cart")
+                            document.getElementById('cartcounter').innerHTML = response["cartcount"]; //Updating cartcounter of navbar
+                        } catch (e) { }
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock js %}
+
+
+{% block body %}
+<main id="main">
+
+
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                
+
+
+                <div class="col">
+
+                    <img class="card-img-top imagefit" src="{% static 'assets/temp/watermark.jpg' %}"
+                         onclick="onClick(this)">
+                    <div class="button" style="margin-left: 10px;margin-top: 10px;"><a id="like{{image.image_id}}"
+                            onclick="incLikes(this)">
+
+                            <img id="likebtn{{image.image_id}}" src="{%static 'assets/svg/like/like.svg'  %}"
+                                style="width: 8%;" />
+                            <img id="likedbtn{{image.image_id}}" src="{%static 'assets/svg/like/liked.svg'  %}"
+                                style="width: 8%; display: none;" />
+
+
+                        </a>
+                        <h7><span id="actuallikes{{image.image_id}}"> </span> Likes</h7>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title"> <b> {{image.image_name}} </b></h5>
+                        <p class="card-text">Resolution:{{image.resolution}} <br>Category:{{image.category}} <br> Price:
+                            &#8377;{{image.price}} <br> {{image.description}} </p>
+                        <small class="text-muted">Upload Date: {{image.date_added}}</small>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+
+                                <input type="hidden" name="next" value="{{ request.path }}">
+                                <a id="img{{image.image_id}}" class="btn-border cartbtn"> Add To Cart
+                                </a>
+
+                                <a href="placeorder" class="btn-border" style="margin-left: 5%;"> Purchase </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+            </div>
+            <!--FULL IMAGE POPUP-->
+            <div id="modal01" class="w3-modal" onclick="this.style.display='none'">
+                <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
+                <div class="w3-modal-content w3-animate-zoom">
+                    <img id="img01" style="width:100%">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    {% for image in images %}
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="img_5terre.jpg">
+                <img src="/media/{{image.image_upload}}" alt="Cinque Terre" width="600" height="400">
+            </a>
+            <div class="desc">Add a description of the image here</div>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+
+ 
+
+</main><!-- End #main -->
+
+{% endblock body %}

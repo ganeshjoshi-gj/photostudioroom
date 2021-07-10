@@ -1,0 +1,15 @@
+
+  Hello {{firstname}} {{lastname}},
+      
+  
+    Thank Your For Requesting Image Approval On Photostudioroom,    
+    After Reviewing Your Image We Have Approved Your Image,    
+    It Shall Go Live On Our Website within 24 Hours,     
+    Upload More Images and Earn Money, Have a Nice Day!
+  
+      
+
+      
+  Regards,
+      
+  Photostudioroom 

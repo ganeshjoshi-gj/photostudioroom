@@ -1,0 +1,35 @@
+{% load static %}
+<html>
+<head>
+</head>
+<body style="font-size:medium;">
+    
+  Hello <strong>{{firstname}} {{lastname}}</strong>,
+  <br>
+  <p>
+  You Have Made Changes to Your Image On Photostudioroom,<br>
+  The Image Will be Reviewed Again Before Going Live On Photostudioroom,<br>
+  After Reviewing Your Request ,We Will Get Back to You Soon, Have a Nice Day!"
+  
+  <br><br>
+
+  <u>  <b>Here Are The Details Of Your Updated Image:</b> </u> <br>
+  <i>
+      Image Id: {{image.image_id}}<br>
+      Image Name: {{image.image_name}}<br>
+      Description: {{image.description}}<br>
+      Category: {{image.category.category_name}}<br>
+      Tags: {{image.tags}}<br><br>
+
+  </i>
+
+  <p> You Can Also View The Details of Your Image in Your Dashboard. </p>
+
+
+  <br>
+  Regards,
+  <br>
+  Photostudioroom 
+  </p>
+</body>
+</html>

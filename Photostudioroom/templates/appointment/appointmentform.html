@@ -1,0 +1,1398 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Appointment Form | Photostudioroom</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet"
+        href="{% static 'assets/appointment/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+    <script src="{% static 'assets/css/stockimages/contributor/plugins/jquery/jquery.min.js'%}"></script>
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'assets/appointment/css/style.css' %}">
+    <link href="{% static 'assets/img/PSRicon.jpg' %}" rel="icon">
+    <script>
+        function clearAll() {
+
+
+            $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');
+            $(':checkbox, :radio').prop('checked', false);
+            $(".init").replaceWith("<li value='' class='init'> State </li>");
+            $(".jsselectstate option[value='selected']").replaceWith("<option value='' disabled='disabled' selected='selected'>State</option>")
+            $(".jsselectcity option[value='selected']").replaceWith("<option value='' disabled='disabled' selected='selected'>City</option>")
+            $(".jsselectarea option[value='selected']").replaceWith("<option value='' disabled='disabled' selected='selected'>Area</option>")
+            $(".jsselectevent option[value='selected']").replaceWith("<option value='' disabled='disabled' selected='selected'>Event</option>")
+            $(".jsselectplace option[value='selected']").replaceWith("<option value='' disabled='disabled' selected='selected'>Place</option>")
+
+
+        }
+
+
+
+
+        $(document).ready(function () {
+
+            $("#name").val("{{user.first_name}} {{user.last_name}}");
+            $("#email").val("{{user.email}}");
+            $("#phone_number").val("{{address.contact_1}}");
+            $("#phone_number2").val("{{address.contact_2}}");
+            $("#addressline1").val("{{address.address_line1}}");
+            $("#addressline2").val("{{address.address_line2}}");
+
+        });
+
+
+        $(document).ready(function () {
+            var eventId = $(".jsselectevent").val();
+            console.log("Event id: ",eventId)
+            if(eventId != null){
+                if (eventId == 8) {
+                    console.log("Pre-Wedding")
+                    $(".jsselectstate").prop("required", false);
+                    $(".jsselectcity").prop("required", false);
+                    $(".jsselectarea").prop("required", false);
+                    $("#addressline1").prop("required", false);
+                    $("#addressline2").prop("required", false);
+                    $("#phone_number").prop("required", false);
+
+
+                    $("#divwholeaddress").hide();
+
+                    $("#divsaveaddress").hide();
+                    $("#divservice").show(500);
+                    $("#divphotoquantity").hide();
+                    $("#getestimate").prop("value", "Submit")
+
+                }
+                else if (eventId == 9) {
+                    $(".jsselectstate").prop("required", false);
+                    $(".jsselectcity").prop("required", false);
+                    $(".jsselectarea").prop("required", false);
+                    $("#addressline1").prop("required", false);
+                    $("#addressline2").prop("required", false);
+                    $("#phone_number").prop("required", false);
+                    console.log("Wedding")
+                    $("#divwholeaddress").hide();
+                    $("#divsaveaddress").hide();
+                    $("#divservice").show(500);
+                    //$("#divvideoduration").hide();
+                    $("#divphotoquantity").hide();
+                    $("#getestimate").prop("value", "Submit")
+                }
+                else {
+                    $(".jsselectstate").prop("required", true);
+                    $(".jsselectcity").prop("required", true);
+                    $(".jsselectarea").prop("required", true);
+                    $("#addressline1").prop("required", true);
+                    $("#addressline2").prop("required", true);
+                    $("#phone_number").prop("required", true);
+                    $("#divwholeaddress").show(500);
+                    $("#divsaveaddress").show(500);
+                    $("#divservice").hide();
+                    //$("#divvideoduration").hide();
+                    //$("#divdays").hide();
+                    $("#divgears").hide();
+                    $("#divphotoquantity").show(500);
+                    $("#getestimate").prop("value", "Get Estimated Amount")
+                }
+            }
+            /*EVENT*/
+            $(".jsselectevent").change(function () {
+                console.log("Event Changed")
+                var url = "{% url 'ajax_load_places' %}"  // get the url of the `load_places` view
+                var eventId = $(this).val();  // get the selected event ID from the HTML input
+
+                $.ajax({                       // initialize an AJAX request
+                    url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                    data: {
+                        'event': eventId       // add the country id to the GET parameters
+                    },
+                    success: function (data) {   // `data` is the return of the `load_cities` view function
+                        $(".jsselectplace").html(data);  // replace the contents of the city input with the data that came from the server
+                    }
+                });
+                console.log(eventId)
+                if(eventId != null){
+                    if (eventId == 8) {
+                        console.log("Pre-Wedding")
+                        $(".jsselectstate").prop("required", false);
+                        $(".jsselectcity").prop("required", false);
+                        $(".jsselectarea").prop("required", false);
+                        $("#addressline1").prop("required", false);
+                        $("#addressline2").prop("required", false);
+                        $("#phone_number").prop("required", false);
+                        $("#divwholeaddress").hide();
+                        $("#divsaveaddress").hide();
+                        $("#divservice").show(500);
+                        $("#divphotoquantity").hide();
+                        $("#getestimate").prop("value", "Submit")
+
+                    }
+                    else if (eventId == 9) {
+                        console.log("Wedding")
+                        $(".jsselectstate").prop("required", false);
+                        $(".jsselectcity").prop("required", false);
+                        $(".jsselectarea").prop("required", false);
+                        $("#addressline1").prop("required", false);
+                        $("#addressline2").prop("required", false);
+                        $("#phone_number").prop("required", false);
+                        $("#divwholeaddress").hide();
+                        $("#divsaveaddress").hide();
+                        $("#divservice").show(500);
+                        //$("#divvideoduration").hide();
+                        $("#divphotoquantity").hide();
+                        $("#getestimate").prop("value", "Submit")
+                    }
+                    else {
+                        $(".jsselectstate").prop("required", true);
+                        $(".jsselectcity").prop("required", true);
+                        $(".jsselectarea").prop("required", true);
+                        $("#addressline1").prop("required", true);
+                        $("#addressline2").prop("required", true);
+                        $("#phone_number").prop("required", true);
+                        $("#divwholeaddress").show(500);
+                        $("#divsaveaddress").show(500);
+                        $("#divservice").hide();
+                        //$("#divvideoduration").hide();
+                        //$("#divdays").hide();
+                        $("#divgears").hide();
+                        $("#divphotoquantity").show(500);
+                        $("#getestimate").prop("value", "Get Estimated Amount")
+                    }
+                }
+
+            });
+
+            $("#services").change(function () {
+                eventId = $(".jsselectevent").val();
+                /* EventId 8 = Pre-Wedding */
+                if(eventId != null){
+                    if (eventId == 8) {
+                        console.log("Pre-Wedding");
+                        $("#divphotoquantity").hide();
+                        if ($(this).val() == "photography") {
+                            console.log("Photography")
+                            //$("#divdays").show(500);
+                            $("#divgears").hide();
+                            //$("#divvideoduration").hide();
+                        }
+                        else if ($(this).val() == "videography") {
+                            console.log("Videography")
+                            //$("#divdays").show(500);
+                            $("#divgears").show(500);
+                            //$("#divvideoduration").show(500);
+                        }
+                        else if ($(this).val() == "photovideoboth") {
+                            console.log("Photography + Videography")
+                            //$("#divdays").show(500);
+                            $("#divgears").show(500);
+                            //$("#divvideoduration").show(500);
+
+                        }
+                        else {
+                            //$("#divdays").hide();
+                            $("#divgears").hide();
+                            //$("#divvideoduration").hide();
+                        }
+                    }
+                    /* EventId 9 = Wedding */
+                    if (eventId == 9) {
+                        $("#divphotoquantity").hide();
+                        console.log("Wedding");
+
+                        if ($(this).val() == "photography") {
+                            console.log("Photography")
+                            //$("#divdays").show(500);
+                            $("#divgears").hide();
+                            //$("#divvideoduration").hide();
+                        }
+                        else if ($(this).val() == "videography") {
+                            console.log("Videography")
+                            //$("#divdays").show(500);
+                            $("#divgears").show(500);
+
+                        }
+                        else if ($(this).val() == "photovideoboth") {
+                            console.log("Photography + Videography")
+                            //$("#divdays").show(500);
+                            $("#divgears").show(500);
+
+
+                        }
+                        else {
+                            //$("#divdays").hide();
+                            $("#divgears").hide();
+                            //$("#divvideoduration").hide();
+                        }
+                    }
+                }
+            });
+
+            /* STATE */
+
+            $(".jsselectstate").change(function () {
+                console.log("State Changed")
+                var url = "{% url 'ajax_load_cities' %}"  // get the url of the `load_cities` view
+                var stateId = $(this).val();  // get the selected country ID from the HTML input
+
+                $.ajax({                       // initialize an AJAX request
+                    url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                    data: {
+                        'state': stateId       // add the country id to the GET parameters
+                    },
+                    success: function (data) {   // `data` is the return of the `load_cities` view function
+                        $(".jsselectcity").html(data);  // replace the contents of the city input with the data that came from the server
+                    }
+                });
+
+            });
+
+            $(".jsselectcity").change(function () {
+                console.log("State Changed")
+                var url = "{% url 'ajax_load_areas' %}"  // get the url of the `load_cities` view
+                var cityId = $(this).val();  // get the selected country ID from the HTML input
+
+                $.ajax({                       // initialize an AJAX request
+                    url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                    data: {
+                        'city': cityId       // add the country id to the GET parameters
+                    },
+                    success: function (data) {   // `data` is the return of the `load_cities` view function
+                        $(".jsselectarea").html(data);  // replace the contents of the city input with the data that came from the server
+                    }
+                });
+
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            var isestimated = '{{isestimated}}'
+            var eventId = '{{selectedevent}}'
+            console.log("EventID in Timeout: " + eventId)
+            if (eventId == 8) {
+                console.log("Event id is 8")
+            }
+            else if (eventId == 9) {
+                console.log("Event id is 9")
+            }
+            else {
+                console.log("Event id is other than 8 and 9")
+            }
+            console.log((isestimated == "true" && eventId != 8 && eventId != 9))
+            console.log(isestimated)
+            if (isestimated == "true" && eventId != 8 && eventId != 9) {
+                $("#getestimate").hide();
+                $("#clear").hide();
+                $(".form-group-1").remove();
+                $(".form-group-2").remove();
+                $(".form-group-3").remove();
+                $("#divplace").remove();
+                $("#divsaveaddress").remove();
+                
+
+                /*
+                                $('#name').prop('required',false);
+                                $('#email').prop('required',false);
+                                $('#selectevent').prop('required',false);
+                                $('#selectevent').prop('required',false);
+                
+                                $('#selectevent').prop('required',false);
+                                $('#eventduration').prop('required',false);
+                                $('#selectplace').prop('required',false);
+                                $('#date').prop('required',false);
+                                $('#time').prop('required',false);
+                */
+                $("#note").hide();
+                $("#circle_square").show();
+                $("#waittext").show();
+                $('#appointment-form').attr('action', 'payment/{{bookingamount}}');
+                setTimeout(function () {
+                    $("#actualestamount").show();
+                    $("#actualbookamount").show();
+                    $("#circle_square").hide();
+                    $("#waittext").hide();
+                    $("#book").show();
+                    $("#cancel").show();
+                }, 5000);
+            }
+            else if (eventId == 8 || eventId == 9) {
+                $("#getestimate").hide();
+                $("#clear").hide();
+                $(".form-group-1").remove();
+                $(".form-group-2").remove();
+                $(".form-group-3").remove();
+                $("#divsaveaddress").remove();
+                $("#divplace").remove();
+                $("#note").hide();
+                $('#appointment-form').attr('action', 'payment/{{bookingamount}}');
+                setTimeout(function () {
+                    $("#actualbookamount").show();
+                    $("#circle_square").hide();
+                    $("#waittext").hide();
+                    $("#book").show();
+                    $("#cancel").show();
+                }, 0010);
+            }
+        });
+        //Checking If Saved Address Name is Already Available WIth AJAX
+        $(document).ready(function () {
+
+            $("#savedaddressname").focusout(function (e) {
+                console.log("we are in saved address name focusout")
+
+                // get the nickname
+                var savedaddressname = $(this).val();
+                // GET AJAX request
+                $.ajax({
+                    type: 'GET',
+                    url: "{% url 'checkSavedAddressName' %}",
+                    data: { "savedaddressname": savedaddressname, "csrfmiddlewaretoken": "{{csrf_token}}" },
+                    success: function (response) {
+                        // if not valid user, alert the user
+                        console.log(response)
+                        console.log(response["valid"])
+                        if (!response["valid"]) {
+                            document.getElementById("displaysaveaddressnameerror").innerHTML = "<h7 style='color:red'> This Address Name is Already Saved by You! Please Enter a Different Name For This Address </h7>";
+                            document.getElementById("displaysaveaddressnameerror").style.display = "block";
+
+                            var savedaddressname = $("#savedaddressname");
+                            savedaddressname.val("")
+                            savedaddressname.focus()
+                        }
+                        else {
+                            document.getElementById("displaysaveaddressnameerror").style.display = "none";
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                })
+            });
+        });
+
+        //Get Address When Select Saved Address
+        $(document).ready(function () {
+
+            $(".jsselectsavedaddresses").change(function () {
+                console.log("Saved Address Changed")
+                var url = "{% url 'sendSavedAddress' %}"  // get the url of the `load_places` view
+                var savedaddressname = $(this).val();  // get the selected event ID from the HTML input
+
+                $.ajax({                       // initialize an AJAX request
+                    url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                    data: {
+                        'savedaddressname': savedaddressname       // add the country id to the GET parameters
+                    },
+                    success: function (data) {   // `data` is the return of the `load_cities` view function
+
+                        $("#phone_number").val(data["contact_1"]);
+                        $("#phone_number2").val(data["contact_2"]);
+                        $("#addressline1").val(data["line1"]);
+                        $("#addressline2").val(data["line2"]);
+                        //$(".jsselectarea").val(data["area"]);
+                        //$(".jsselectcity").val(data["city"]);
+                        //$(".jsselectstate").val(data["state"]);
+
+                        state = JSON.parse(data["state"])
+                        city = JSON.parse(data["city"])
+                        area = JSON.parse(data["area"])
+
+
+                        //state
+                        $("#defaultstate").replaceWith("<option selected='selected' id='defaultstate' disabled='disabled' value=' " + state[0]["pk"] + "'>" + state[0]["fields"]["state_name"] + "</option>")
+
+                        //city
+                        $("#defaultcity").replaceWith("<option selected='selected' id='defaultcity' disabled='disabled' value=' " + city[0]["pk"] + "'>" + city[0]["fields"]["city_name"] + "</option>")
+
+                        //area
+                        $("#defaultarea").replaceWith("<option selected='selected' id='defaultarea' disabled='disabled' value=' " + area[0]["pk"] + "'>" + area[0]["fields"]["area_name"] + "</option>")
+
+
+                        $("#divsaveaddress").hide()
+
+
+                    }
+                });
+            });
+
+        });
+    </script>
+    <style>
+        /*-----------------------------------------------------------------------*/
+        /**===== circle_square =====*/
+        #circle_square {
+            display: block;
+            position: absolute;
+            top: 220px;
+            left: 270px;
+            height: 36px;
+            width: 36px;
+            margin: -15px 0 0 -25px;
+
+        }
+
+        #circle_square span {
+            width: 15px;
+            height: 15px;
+            background-color: #000;
+            display: inline-block;
+            background-color: #18bc9c;
+            -webkit-animation: square2 2s infinite ease-in-out both;
+            animation: square2 2s infinite ease-in-out both;
+        }
+
+        #circle_square span:nth-child(1) {
+            -webkit-animation: preloader_2_1 1.5s infinite ease-in-out;
+            animation: preloader_2_1 1.5s infinite ease-in-out;
+        }
+
+        #circle_square span:nth-child(2) {
+            left: 20px;
+            -webkit-animation: preloader_2_2 1.5s infinite ease-in-out;
+            animation: preloader_2_2 1.5s infinite ease-in-out;
+        }
+
+        #circle_square span:nth-child(3) {
+            top: 0px;
+            -webkit-animation: preloader_2_3 1.5s infinite ease-in-out;
+            animation: preloader_2_3 1.5s infinite ease-in-out;
+        }
+
+        #circle_square span:nth-child(4) {
+            top: 0px;
+            left: 20px;
+            -webkit-animation: preloader_2_4 1.5s infinite ease-in-out;
+            animation: preloader_2_4 1.5s infinite ease-in-out;
+        }
+
+        @-webkit-keyframes preloader_2_1 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(-20px) translateY(-10px) rotate(-180deg);
+                transform: translateX(-20px) translateY(-10px) rotate(-180deg);
+                border-radius: 50%;
+                background: #3498db;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @keyframes preloader_2_1 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(-20px) translateY(-10px) rotate(-180deg);
+                transform: translateX(-20px) translateY(-10px) rotate(-180deg);
+                border-radius: 50%;
+                background: #3498db;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @-webkit-keyframes preloader_2_2 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(20px) translateY(-10px) rotate(180deg);
+                transform: translateX(20px) translateY(-10px) rotate(180deg);
+                border-radius: 50%;
+                background: #f1c40f;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @keyframes preloader_2_2 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(20px) translateY(-10px) rotate(180deg);
+                transform: translateX(20px) translateY(-10px) rotate(180deg);
+                border-radius: 50%;
+                background: #f1c40f;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @-webkit-keyframes preloader_2_3 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(-20px) translateY(10px) rotate(-180deg);
+                transform: translateX(-20px) translateY(10px) rotate(-180deg);
+                border-radius: 50%;
+                background: #2ecc71;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @keyframes preloader_2_3 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(-20px) translateY(10px) rotate(-180deg);
+                transform: translateX(-20px) translateY(10px) rotate(-180deg);
+                border-radius: 50%;
+                background: #2ecc71;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(-360deg);
+                transform: translateX(0px) translateY(0px) rotate(-360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @-webkit-keyframes preloader_2_4 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(20px) translateY(10px) rotate(180deg);
+                transform: translateX(20px) translateY(10px) rotate(180deg);
+                border-radius: 50%;
+                background: #e74c3c;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+        }
+
+        @keyframes preloader_2_4 {
+            0% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(0deg);
+                transform: translateX(0px) translateY(0px) rotate(0deg);
+                border-radius: 0px;
+            }
+
+            50% {
+                -webkit-transform: translateX(20px) translateY(10px) rotate(180deg);
+                transform: translateX(20px) translateY(10px) rotate(180deg);
+                border-radius: 50%;
+                background: #e74c3c;
+            }
+
+            80% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+
+            100% {
+                -webkit-transform: translateX(0px) translateY(0px) rotate(360deg);
+                transform: translateX(0px) translateY(0px) rotate(360deg);
+                border-radius: 0px;
+            }
+        }
+
+        /** END of circle_square */
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .onboarding-header {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-pack: center;
+            justify-content: center;
+            top: 0;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+
+
+        }
+
+        .onboarding-header__logo {
+            display: block;
+            font-size: 19px;
+            line-height: 1;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 0;
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .onboarding-header__logo__img {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center
+        }
+
+        .onboarding-header__logo__img svg {
+            border-radius: 8px;
+            height: 40px;
+            width: 40px
+        }
+
+        .onboarding-header__logo__text {
+            margin-left: 1rem
+        }
+
+        .onboarding-header__logo__text:hover {
+            text-decoration: none;
+            scale: 2%;
+        }
+
+
+
+        body {
+            background-color: lightskyblue;
+        }
+
+        .appointment-form {
+            padding: 50px 60px 0px 60px;
+        }
+
+        /* To Remove Default Option Of Select Tag For Event Duration */
+        #eventdurationhours:focus option:first-of-type {
+            display: none;
+        }
+
+        #eventdurationminutes:focus option:first-of-type {
+            display: none;
+        }
+
+        /* Base for label styling */
+        [type="checkbox"]:not(:checked),
+        [type="checkbox"]:checked {
+            position: absolute;
+            left: 0;
+            opacity: 0.01;
+        }
+
+        [type="checkbox"]:not(:checked)+label,
+        [type="checkbox"]:checked+label {
+            position: relative;
+            padding-left: 2.3em;
+            font-size: 1.05em;
+            line-height: 1.7;
+            cursor: pointer;
+        }
+
+        /* checkbox aspect */
+        [type="checkbox"]:not(:checked)+label:before,
+        [type="checkbox"]:checked+label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.4em;
+            height: 1.4em;
+            border: 1px solid #aaa;
+            background: #FFF;
+            border-radius: .2em;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .1), 0 0 0 rgba(203, 34, 237, .2);
+            -webkit-transition: all .275s;
+            transition: all .275s;
+        }
+
+        /* checked mark aspect */
+        [type="checkbox"]:not(:checked)+label:after,
+        [type="checkbox"]:checked+label:after {
+            content: '\2713';
+            position: absolute;
+            top: .525em;
+            left: .18em;
+            font-size: 1.375em;
+            color: #CB22ED;
+            line-height: 0;
+            -webkit-transition: all .2s;
+            transition: all .2s;
+        }
+
+        /* checked mark aspect changes */
+        [type="checkbox"]:not(:checked)+label:after {
+            opacity: 0;
+            -webkit-transform: scale(0) rotate(45deg);
+            transform: scale(0) rotate(45deg);
+        }
+
+        [type="checkbox"]:checked+label:after {
+            opacity: 1;
+            -webkit-transform: scale(1) rotate(0);
+            transform: scale(1) rotate(0);
+        }
+
+        /* Disabled checkbox */
+        [type="checkbox"]:disabled:not(:checked)+label:before,
+        [type="checkbox"]:disabled:checked+label:before {
+            box-shadow: none;
+            border-color: #bbb;
+            background-color: #e9e9e9;
+        }
+
+        [type="checkbox"]:disabled:checked+label:after {
+            color: #777;
+        }
+
+        [type="checkbox"]:disabled+label {
+            color: #aaa;
+        }
+
+        /* Accessibility */
+        [type="checkbox"]:checked:focus+label:before,
+        [type="checkbox"]:not(:checked):focus+label:before {
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .1), 0 0 0 6px rgba(203, 34, 237, .2);
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#photosquantity").focus(function () {
+                console.log("eventduration hours focused")
+                if ($('#photosquantity').prop('selectedIndex') == 0) {
+                    $('#photosquantity').prop('selectedIndex', 1);
+                    $('#photosquantity option:eq(1)').attr('selected', 'selected');
+                    $('#photosquantity option:eq(0)').removeAttr('selected', 'selected');
+                }
+            });
+
+        })
+        $(document).ready(function () {
+            $("#appointment-form").submit(function (e) {
+                var selectedphotosquantity = $("#photosquantity").children("option:selected").val();
+                console.log("selected photo quantity: " + selectedphotosquantity);
+                var eventid = $(".jsselectevent").val();
+
+                if (eventid != 8 && eventid != 9 && selectedphotosquantity == "Photos") {
+                    console.log("Please Select Photos Quantity")
+                    $("#photosquantityselecterror").show();
+                    $("#photosquantity").focus();
+                    e.preventDefault();
+                }
+                else {
+                    $("#photosquantityselecterror").hide();
+                }
+
+
+
+            });
+
+        });
+
+        /* Restricting Past Dates For Calendar */
+        $(document).ready(function () {
+            var dtToday = new Date();
+            const leap = new Date(year, 1, 29).getDate() === 29;
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate() + 1;
+            var year = dtToday.getFullYear();
+
+            console.log("Month Type", typeof (month))
+            month = parseInt(month)
+            console.log("After COnverting Month Type", typeof (month))
+
+            //31 Days in a month
+            if (month == 01 || month == 03 || month == 05 || month == 07 || month == 08 || month == 10 || month == 12) {
+                console.log("We are in 31 Days in a Month")
+                if (day > 31) {
+                    console.log("Days are greater than 31")
+                    console.log("Day: " + day)
+                    console.log("Month: " + month)
+                    console.log("Year: " + year)
+
+                    month = month + 1
+                    day = day - 31
+
+                    console.log("After Changing")
+                    console.log("Day: " + day)
+                    console.log("Month: " + month)
+                    console.log("Year: " + year)
+                }
+            }
+            //30 Days in a month
+            if (month == 04 || month == 06 || month == 09 || month == 11) {
+                if (day > 30) {
+
+                    console.log("Days are greater than 30")
+                    console.log("Day: " + day)
+                    console.log("Month: " + month)
+                    console.log("Year: " + year)
+
+                    month = month + 1
+                    day = day - 30
+
+                    console.log("After Changing")
+                    console.log("Day: " + day)
+                    console.log("Month: " + month)
+                    console.log("Year: " + year)
+                }
+            }
+            if (leap) {
+                //29 Days in a month
+                console.log("Year is Leap")
+                if (month == 02) {
+                    console.log("Month is Feb")
+                    if (day > 29) {
+                        console.log("Days are greater than 29")
+                        console.log("Day: " + day)
+                        console.log("Month: " + month)
+                        console.log("Year: " + year)
+
+                        month = month + 1
+                        day = day - 29
+
+                        console.log("After Changing")
+                        console.log("Day: " + day)
+                        console.log("Month: " + month)
+                        console.log("Year: " + year)
+
+                    }
+                }
+            }
+            else {
+                console.log("Year is Not Leap")
+                //28 Days in a month
+                if (month == 02) {
+                    console.log("Month is Feb")
+                    if (day > 28) {
+                        console.log("Days are greater than 28")
+                        console.log("Day: " + day)
+                        console.log("Month: " + month)
+                        console.log("Year: " + year)
+
+                        month = month + 1
+                        day = day - 28
+
+                        console.log("After Changing")
+                        console.log("Day: " + day)
+                        console.log("Month: " + month)
+                        console.log("Year: " + year)
+
+
+                    }
+                }
+            }
+            if (month > 12) {
+                console.log("Month is Greater Than 12")
+                year = year + 1
+                month = month - 12
+                console.log("After Changing Month ")
+                console.log("Month: ", month)
+                console.log("Year: ", year)
+            }
+
+
+            // or instead:
+            // var maxDate = dtToday.toISOString().substr(0, 10);
+            if (month < 10)
+                month = '0' + month.toString();
+            if (day < 10)
+                day = '0' + day.toString();
+            var maxDate = year + '-' + month + '-' + day;
+            console.log("Final Date: ", maxDate)
+            $('#date').attr('min', maxDate);
+        });
+
+        /* For Showing Textbox on Checking SAve This Address*/
+        $(document).ready(function () {
+            $("#checkboxsaveaddress").click(function () {
+                console.log("You Clicked on Checkbox")
+                if ($(this).is(':checked')) {
+                    console.log("Checked")
+                    $(this).prop('checked', true);
+                }
+                else {
+                    console.log("Not Checked")
+                    $(this).prop('checked', false);
+                }
+
+                if ($("#checkboxsaveaddress").is(':checked')) {
+                    console.log("Checked So Show TextBox")
+                    $("#savedaddressname").show(500);
+                    $("#savedaddressname").prop('required', true);
+                    $("#labelcheckboxsaveaddress").text("Save This Address As")
+                }
+                else {
+                    console.log("Not Checked So Hide TextBox")
+                    $("#savedaddressname").prop('required', false);
+                    $("#savedaddressname").hide();
+                    $("#labelcheckboxsaveaddress").text("Save This Address")
+                }
+            });
+
+
+        });
+
+    </script>
+</head>
+
+<body>
+
+    <div style="position:relative;">
+        <div class="onboarding-header">
+            <a class="onboarding-header__logo" href="/">
+                <div class="onboarding-header__logo__img">
+                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="32px" height="32px"
+                        viewBox="0 0 434.000000 434.000000" preserveAspectRatio="xMidYMid meet">
+
+                        <g transform="translate(0.000000,434.000000) scale(0.100000,-0.100000)" fill="#000000"
+                            stroke="none">
+                            <path d="M1925 4325 c-703 -80 -1333 -506 -1664 -1126 -382 -714 -340 -1572
+        109 -2240 340 -504 864 -835 1485 -936 153 -24 477 -24 630 0 549 90 1006 346
+        1353 762 362 433 547 1028 492 1586 -75 754 -521 1404 -1196 1742 -364 182
+        -799 259 -1209 212z m1549 -929 c78 -39 76 -22 76 -551 0 -449 -1 -471 -20
+        -502 -29 -48 -72 -65 -177 -71 -51 -3 -93 -6 -93 -8 0 -2 11 -32 25 -66 13
+        -35 81 -220 151 -413 69 -192 137 -376 149 -408 l24 -57 -166 2 -165 3 -18 50
+        c-11 28 -44 122 -75 210 -31 88 -101 285 -156 438 -97 274 -99 281 -99 368 l0
+        89 155 0 155 0 0 329 0 328 -67 6 c-38 4 -125 7 -194 7 l-126 0 -6 -137 c-4
+        -75 -7 -162 -7 -195 l0 -58 -155 0 -155 0 0 200 0 200 -195 0 -195 0 1 -192 0
+        -193 330 -308 c181 -169 337 -322 346 -340 16 -28 18 -70 21 -359 3 -310 2
+        -329 -17 -366 -38 -75 -46 -77 -466 -80 -399 -3 -434 0 -479 47 -43 45 -46 68
+        -46 362 l0 279 155 0 155 0 0 -215 0 -215 195 0 195 0 0 209 0 209 -329 311
+        c-208 197 -335 324 -347 348 -17 34 -19 67 -22 328 -2 181 1 303 7 325 12 41
+        53 83 96 98 20 7 267 10 765 9 703 -2 737 -3 774 -21z m-1853 3 c19 -7 45 -21
+        58 -33 46 -41 51 -69 51 -316 l0 -231 -37 -32 c-21 -18 -68 -60 -106 -95 -38
+        -35 -71 -62 -72 -60 -2 2 -9 118 -15 258 -6 140 -15 259 -20 263 -6 7 -5 -123
+        3 -220 2 -18 1 -33 -1 -33 -2 0 -51 34 -108 75 -80 57 -109 73 -122 67 -9 -5
+        -71 -24 -137 -42 -122 -33 -315 -87 -348 -96 -10 -3 -17 -8 -15 -10 3 -2 59
+        11 126 30 67 18 122 30 122 26 0 -3 -42 -105 -94 -226 -51 -120 -97 -230 -101
+        -244 -15 -50 5 -12 51 95 25 61 49 113 53 117 3 3 64 -101 136 -233 71 -131
+        133 -239 137 -239 8 0 -2 19 -93 183 -21 37 -35 67 -31 67 11 0 272 -47 410
+        -73 67 -13 125 -20 128 -15 3 4 2 8 -2 8 -23 0 -260 44 -265 49 -3 3 86 86
+        198 184 l204 178 -3 -315 c-3 -302 -4 -316 -24 -343 -12 -15 -36 -37 -55 -48
+        -32 -19 -55 -20 -326 -23 l-293 -3 0 -380 0 -379 -155 0 -155 0 0 1050 0 1050
+        434 0 c297 0 444 -4 467 -11z m2069 -2309 l0 -220 -200 0 -200 0 0 153 0 154
+        123 -2 c67 -1 126 -3 130 -4 4 0 6 -49 5 -108 -3 -108 -3 -108 -28 -108 -25 0
+        -25 1 -28 93 -2 80 -5 93 -18 88 -9 -3 -20 -6 -25 -6 -5 0 -9 -41 -9 -91 0
+        -88 -1 -90 -22 -87 -22 3 -23 8 -26 96 -2 80 -5 93 -18 88 -9 -3 -20 -6 -25
+        -6 -6 0 -9 -42 -7 -102 l3 -103 145 0 145 0 3 193 2 192 25 0 25 0 0 -220z
+        m-2620 145 l0 -65 48 3 47 2 3 -112 3 -113 -26 0 c-25 0 -25 0 -25 89 0 91 -5
+        106 -34 95 -13 -5 -16 -23 -16 -95 0 -88 0 -89 -25 -89 l-25 0 0 150 0 150
+        -150 0 -150 0 0 -195 0 -195 -30 0 -30 0 0 220 0 220 205 0 205 0 0 -65z
+        m1328 -107 l-3 -173 -60 -1 c-94 0 -95 1 -95 115 0 109 1 111 66 111 l34 0 0
+        60 0 60 30 0 30 0 -2 -172z m92 107 c0 -20 -5 -25 -25 -25 -20 0 -25 5 -25 25
+        0 20 5 25 25 25 20 0 25 -5 25 -25z m-1020 -24 c0 -20 6 -30 20 -34 11 -3 20
+        -13 20 -22 0 -9 -9 -19 -20 -22 -17 -5 -20 -14 -20 -68 0 -55 3 -63 21 -68 13
+        -4 20 -12 17 -24 -4 -20 -28 -28 -64 -19 -23 6 -24 10 -24 90 0 65 -3 85 -15
+        90 -8 3 -15 15 -15 26 0 11 7 20 15 20 10 0 15 10 15 30 0 25 4 30 25 30 21 0
+        25 -5 25 -29z m510 0 c0 -20 6 -30 20 -34 11 -3 20 -13 20 -22 0 -9 -9 -19
+        -20 -22 -17 -5 -20 -14 -20 -69 0 -58 2 -64 21 -64 15 0 20 -5 17 -22 -3 -25
+        -26 -33 -64 -24 -23 6 -24 10 -24 90 0 65 -3 85 -15 90 -8 3 -15 15 -15 26 0
+        11 7 20 15 20 10 0 15 10 15 30 0 25 4 30 25 30 21 0 25 -5 25 -29z m-1002
+        -130 c3 -106 -2 -118 -59 -127 -35 -6 -38 -9 -41 -43 -3 -31 -7 -36 -30 -39
+        l-28 -3 0 155 0 154 78 -1 77 -2 3 -94z m380 87 c8 -8 12 -46 12 -105 0 -105
+        -6 -113 -80 -113 -75 0 -80 7 -80 120 0 69 4 100 13 103 25 11 123 7 135 -5z
+        m330 -97 c3 -119 2 -121 -70 -121 -79 0 -78 -1 -78 114 0 57 3 106 7 110 4 4
+        37 6 73 4 l65 -3 3 -104z m180 97 c7 -7 12 -22 12 -35 0 -18 -6 -23 -25 -23
+        -16 0 -25 6 -25 15 0 9 -10 15 -26 15 -39 0 -27 -29 26 -60 39 -23 45 -31 48
+        -64 4 -51 -11 -66 -68 -66 -69 0 -80 7 -80 46 0 30 3 34 25 34 18 0 25 -5 25
+        -20 0 -15 7 -20 25 -20 44 0 31 34 -25 64 -48 26 -50 29 -50 70 0 23 3 46 7
+        49 11 12 118 8 131 -5z m232 -78 c0 -89 0 -90 25 -90 25 0 25 1 25 90 0 89 0
+        90 25 90 l25 0 0 -114 0 -114 -72 2 -73 1 -3 113 -3 112 26 0 c25 0 25 0 25
+        -90z m390 -25 l0 -115 -25 0 -25 0 0 115 0 115 25 0 25 0 0 -115z m188 6 c3
+        -119 2 -121 -70 -121 -79 0 -78 -1 -78 114 0 57 3 106 7 110 4 4 37 6 73 4
+        l65 -3 3 -104z m190 62 c3 -40 1 -43 -22 -43 -19 0 -26 5 -26 19 0 11 -4 22
+        -8 25 -20 12 -30 -15 -34 -94 -3 -83 -4 -85 -28 -85 -25 0 -25 0 -28 111 l-3
+        112 73 -2 73 -1 3 -42z m180 -62 c2 -77 -1 -107 -10 -113 -20 -12 -113 -9
+        -126 4 -13 13 -17 199 -5 212 4 4 37 6 73 4 l65 -3 3 -104z m186 103 c13 -5
+        16 -24 16 -103 0 -62 -4 -101 -12 -109 -15 -15 -102 -16 -129 -2 -17 9 -19 22
+        -19 103 0 59 4 97 12 105 12 12 104 17 132 6z m-1580 -243 c4 -5 -3 -7 -14 -4
+        -11 3 -20 1 -20 -5 0 -6 10 -12 23 -14 12 -2 22 -10 22 -18 0 -18 -43 -26 -59
+        -10 -8 9 -4 10 17 5 17 -5 27 -3 27 4 0 6 -8 11 -18 11 -26 0 -34 11 -21 27
+        13 15 35 17 43 4z m58 -49 c12 -2 18 5 20 30 3 28 5 30 13 14 11 -26 -6 -51
+        -36 -51 -20 0 -24 5 -26 35 -1 34 -1 34 5 5 4 -16 15 -31 24 -33z m113 23 c0
+        -27 -3 -30 -30 -30 -21 0 -31 5 -33 18 -6 33 6 49 35 45 24 -3 28 -8 28 -33z
+        m55 5 c10 0 21 8 23 18 3 9 5 -1 5 -23 0 -22 -2 -32 -5 -22 -2 9 -13 17 -23
+        17 -10 0 -21 -8 -23 -17 -3 -10 -5 0 -5 22 0 22 2 32 5 23 2 -10 13 -18 23
+        -18z m105 0 c20 -38 19 -43 -4 -28 -15 9 -23 9 -35 -1 -9 -8 -16 -10 -16 -7 0
+        10 30 66 35 66 2 0 11 -13 20 -30z m79 21 c4 -5 -3 -7 -14 -4 -11 3 -20 0 -20
+        -6 0 -6 8 -11 18 -11 26 0 34 -11 21 -27 -13 -15 -49 -18 -49 -4 0 5 9 7 20 4
+        11 -3 20 0 20 6 0 6 -8 11 -18 11 -26 0 -34 11 -21 27 13 15 35 17 43 4z m58
+        -21 c6 0 17 8 24 18 12 15 13 13 14 -20 0 -21 -4 -38 -10 -38 -5 0 -10 7 -10
+        15 0 21 -38 19 -43 -2 -3 -10 -5 0 -6 22 0 32 2 36 10 23 5 -10 15 -18 21 -18z
+        m132 8 c11 35 26 25 25 -15 -1 -33 -2 -34 -8 -13 -7 24 -7 24 -19 5 -10 -17
+        -13 -18 -22 -5 -8 13 -10 13 -10 -2 0 -10 -4 -18 -10 -18 -11 0 -14 53 -3 64
+        4 4 15 -3 24 -15 l17 -22 6 21z m100 -10 c16 -32 13 -55 -4 -28 -8 12 -13 13
+        -30 2 -11 -7 -20 -10 -20 -7 0 9 30 65 35 65 2 0 11 -14 19 -32z m89 14 c3 15
+        5 9 6 -16 l1 -39 -25 23 -25 23 0 -22 c0 -12 -4 -19 -10 -16 -11 7 -14 48 -3
+        58 3 4 17 -2 29 -14 l22 -21 5 24z m85 9 c8 -4 12 -19 10 -32 -2 -19 -10 -25
+        -35 -27 -32 -3 -33 -2 -33 32 0 31 3 36 23 36 12 0 28 -4 35 -9z m77 -21 c20
+        -38 19 -43 -4 -28 -15 9 -23 9 -35 -1 -9 -8 -16 -10 -16 -7 0 10 30 66 35 66
+        2 0 11 -13 20 -30z m73 -33 c24 -4 24 -4 -5 -6 -32 -1 -33 0 -31 37 1 36 1 36
+        5 5 3 -26 9 -33 31 -36z" />
+                            <path d="M1056 3191 c32 -29 196 -142 200 -138 5 5 -189 147 -202 147 -4 0 -4
+        -4 2 -9z" />
+                            <path d="M2297 1133 c-4 -3 -7 -35 -7 -70 0 -61 1 -63 25 -63 24 0 25 2 25 70
+        0 61 -2 70 -18 70 -10 0 -22 -3 -25 -7z" />
+                            <path d="M898 1133 c-15 -4 -18 -16 -18 -69 0 -62 1 -65 23 -62 20 3 22 10 25
+        62 3 62 -2 75 -30 69z" />
+                            <path d="M1267 1134 c-4 -4 -7 -36 -7 -71 l0 -63 30 0 31 0 -3 68 c-3 59 -6
+        67 -23 70 -12 2 -24 0 -28 -4z" />
+                            <path d="M1590 1070 c0 -68 1 -70 25 -70 24 0 25 2 25 70 0 68 -1 70 -25 70
+        -24 0 -25 -2 -25 -70z" />
+                            <path d="M2580 1070 c0 -68 1 -70 25 -70 24 0 25 2 25 70 0 68 -1 70 -25 70
+        -24 0 -25 -2 -25 -70z" />
+                            <path d="M2957 1133 c-4 -3 -7 -35 -7 -70 0 -61 1 -63 25 -63 24 0 25 2 25 70
+        0 61 -2 70 -18 70 -10 0 -22 -3 -25 -7z" />
+                            <path d="M3149 1138 c0 -2 -2 -33 -4 -70 l-3 -68 30 0 29 0 -3 68 c-3 61 -5
+        67 -25 70 -13 2 -23 2 -24 0z" />
+                            <path d="M1780 920 c0 -5 7 -10 15 -10 8 0 15 5 15 10 0 6 -7 10 -15 10 -8 0
+        -15 -4 -15 -10z" />
+                            <path d="M1780 890 c0 -5 6 -10 14 -10 8 0 18 5 21 10 3 6 -3 10 -14 10 -12 0
+        -21 -4 -21 -10z" />
+                            <path d="M2490 905 c0 -16 6 -25 15 -25 21 0 31 30 14 41 -23 14 -29 11 -29
+        -16z" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="onboarding-header__logo__text" href="/"
+                    style="text-decoration: none; color: black; cursor: pointer; font-family: Raleway, sans-serif;">
+                    Photostudioroom</div>
+            </a>
+
+        </div>
+        <div class="container">
+            <form action="submitappointment-form" method="POST" class="appointment-form" id="appointment-form">
+                {% csrf_token %}
+                <h2>Photoshoot Appointment Form</h2>
+                <div id="displayestimate">
+                    <div id="circle_square" style="display: none;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <h2 id="waittext" style="margin-top: 10px;margin-left: 90px;display: none;">Please Wait..<br>
+                        Calculating Estimated Payable Amount</h2>
+                </div>
+                <div>
+                    <h3 id="actualestamount" style="display: none;"> Based On Your Entered Details The Estimated Payable
+                        Amount is Shown Below.<br> Note That The Estimated Amount may Differ From The Amount You Have to
+                        Paid After the Photoshoot. <br><br> Estimated Payable Amount: <span
+                            style='font-family:Arial;'>&#8377;</span>{{estimatedamount}} </h3>
+                    <h3 id="actualbookamount" style="display: none;"> Booking Payment: <span
+                            style='font-family:Arial;'>&#8377;</span>{{bookingamount}} </h3>
+
+                </div>
+                <h4 id="note" style="color: black; margin-bottom: 10px;"><strong>Note:</strong> Name & Email are Fetched
+                    From Your Profile </h4>
+                <div class="form-group-1">
+
+                    <input type="text" name="name" id="name" placeholder="Full Name" value="" disabled required />
+                    <input type="email" name="email" id="email" placeholder="Email" value="" disabled required />
+                    <input type="tel" minlength="10" name="phone_number" id="phone_number" placeholder="Phone Number"
+                        value="" required />
+                    <input type="tel" minlength="10" name="phone_number2" id="phone_number2"
+                        placeholder="Alternative Phone Number" value="" />
+                    <div class="select-list">
+                        <select name="selectevent" id="course_type" class="jsselectevent" required>
+                            <option selected value="Event" disabled>Event Type</option>
+                            {% for event in eventtypes %}
+                            <option value="{{event.event_id}}">{{event.event_name}}</option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+
+                    <div class="form-group" style="display: none;" id="divphotoquantity">
+
+                        <h4 style="color: black;">Photos Quantity </h4>
+                        <select name="photosquantity" id="photosquantity" required>
+
+                            <option value="Photos" selected disabled>Photos</option>
+                            {% for photoscounter in fivehundredphotos %}
+                            <option value="{{photoscounter}}">{{photoscounter}}</option>
+                            {% endfor %}
+
+                        </select>
+                        <p id="photosquantityselecterror"
+                            style="font-weight: bold;margin-top: -20px;color:red;display: none;">
+                            Please Select Photo Quantity.</p>
+
+                    </div>
+                    <div class="form-group" style="display: none;" id="divservice">
+
+                        <h4 style="color: black;"> Service You Want </h4>
+                        <select name="services" id="services" required>
+
+                            <option value="service" selected disabled>Service</option>
+
+                            <option value="photography">Photography</option>
+                            <option value="videography">Videography</option>
+                            <option value="photovideoboth">Photography + Videography</option>
+
+                        </select>
+
+                    </div>
+                    <div class="form-group" style="display: none;" id="divgears">
+
+                        <h4 style="color: black;"> Gears </h4>
+                        <select name="gears" id="gears" required>
+
+                            <option value="Gear" selected disabled>Gear</option>
+
+                            <option value="cameras">Cameras</option>
+                            <option value="cameradroneboth">Cameras + Drone</option>
+
+                        </select>
+
+                    </div>
+                    <!---
+                    <div class="form-group" style="display: none;" id="divdays">
+
+                        <h4 style="color: black;">Event Days</h4>
+                        <select name="eventdays" id="eventdays" required>
+
+                            <option value="Days" selected disabled>Days</option>
+                            
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            
+
+                        </select>
+             
+                    </div>
+                    
+                    <div class="form-group" style="display: none;" id="divvideoduration">
+
+                        <h4 style="color: black;">Video Duration</h4>
+                        <select name="videodur" id="videodur" required>
+
+                            <option value="Video Duration" selected disabled>Video Duration</option>
+                            
+                            <option value="1-2">1-2 Minutes</option>
+                            <option value="2-3">2-3 Minutes</option>
+                            <option value="3-4">3-4 Minutes</option>
+                            <option value="4-5">4-5 Minutes</option>
+                            <option value="5-6">5-6 Minutes</option>
+                            <option value="6-7">6-7 Minutes</option>
+                            <option value="7-8">7-8 Minutes</option>
+                            
+
+                        </select>
+             
+                    </div>
+                -->
+
+                </div>
+                <div class="form-group-2" id="divwholeaddress">
+                    <h3>Address Of Event</h3>
+                    <h4 style="color: #000;"> Saved Addresses</h4>
+                    <div class="select-list">
+                        <select name="savedaddresses" id="confirm_type" class="jsselectsavedaddresses" required>
+                            {% if savedaddresses %}
+                            <option value="Saved Address" disabled="disabled" selected="selected">Saved Address
+                            </option>
+                            {% for savedaddress in savedaddresses %}
+                            <option value="{{savedaddress}}">{{savedaddress}}</option>
+                            {% endfor %}
+                            {% else %}
+                            <option value="No Saved Address Found" disabled="disabled" selected="selected">No Saved
+                                Address</option>
+
+                            {% endif %}
+                        </select>
+                    </div>
+                    <input type="text" name="addressline1" id="addressline1" placeholder="Address Line 1" value=""
+                        required />
+                    <input type="text" name="addressline2" id="addressline2" placeholder="Address Line 2" value=""
+                        required />
+                    <div class="select-list">
+                        <select name="selectstate" id="confirm_type" class="jsselectstate" required>
+                            {% if address is not None %}
+
+                            <option selected="selected" id="defaultstate" disabled="disabled"
+                                value="{{address.state.state_id}}">
+                                {{address.state}}</option>
+                            {%else%}
+                            <option value="" disabled="disabled" selected="selected">State</option>
+                            {%endif%}
+                            {% for state in states %}
+                            <option value="{{state.state_id}}">{{state.state_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="select-list">
+                        <select name="selectcity" id="confirm_type" class="jsselectcity" required>
+                            {% if address is not None %}
+
+                            <option selected disabled id="defaultcity" value="{{address.city.city_id}}">{{address.city}}
+                            </option>
+                            {%else%}
+                            <option selected value=""> City </option>
+                            {%endif%}
+                        </select>
+                    </div>
+                    <div class="select-list" style="margin-bottom: -20px;">
+                        <select name="selectarea" id="confirm_type" class="jsselectarea" required>
+                            {% if address is not None %}
+
+                            <option selected disabled id="defaultarea" value="{{address.area.area_id}}">{{address.area}}
+                            </option>
+                            {%else%}
+                            <option selected value=""> Area </option>
+                            {%endif%}
+                        </select>
+                    </div>
+
+                </div>
+                <div class="select-list" id="divplace">
+                    <select name="selectplace" id="confirm_type" class="jsselectplace" required>
+                        <option selected disabled value="">Place</option>
+                        {% for place in places %}
+                        <option value="{{place.location_id}}">{{place.location_name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+                <div style="display: inline-flex;" id="divsaveaddress" style="display: none;">
+                    <input type="checkbox" id="checkboxsaveaddress" />
+                    <label for="checkboxsaveaddress" id="labelcheckboxsaveaddress" style="color: black;">Save This
+                        Address</label>
+
+                    <input type="text" name="savedaddressname" id="savedaddressname"
+                        style="width: 100px;margin-left: 10px;margin-top: 3px;display: none;" placeholder="Address Name"
+                        maxlength="20"><br>
+                    <div id="displaysaveaddressnameerror"
+                        style="display: none;font-weight: bold;margin-top: 5px;margin-left: 5px;"></div>
+
+                </div>
+                <div class="form-group-3">
+                    <h3>Date & Time</h3>
+                    <input type="date" name="date" id="date" placeholder="Date" required />
+                    <input type="time" name="time" id="time" placeholder="Time" required />
+                </div>
+
+                <div class="form-submit" style="display: inline-flex; column-gap: 20px;">
+                    <input type="submit" name="getestimate" id="getestimate" class="submit"
+                        value="Get Estimated Amount" />
+                    <input type="reset" name="clear" id="clear" class="submit" value="Clear" / onclick="clearAll();">
+                </div>
+                <div class="form-submit" style="display: inline-flex; column-gap: 20px;margin-top: 10px;">
+                    <input style="display: none; margin-top: 50px;" type="submit" name="book" id="book" class="submit"
+                        value="Book Appointment" />
+                    <input style="display: none; margin-top: 50px;" type="reset" name="cancel" id="cancel"
+                        class="submit" value="Cancel" onclick="window.location.href='appointment-form/cancel'" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'assets/appointment/vendor/jquery/jquery.min.js' %}"></script>
+    \
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>

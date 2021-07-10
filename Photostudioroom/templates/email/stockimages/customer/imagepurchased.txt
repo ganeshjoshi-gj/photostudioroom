@@ -1,0 +1,11 @@
+Hello {{firstname}} {{lastname}},
+     
+
+    Thank You For Purchasing Images From Photostudioroom,We Hope You Enjoyed The Experience Of Using Our Website, Keep Visiting Us.\nHave a Nice Day!
+      
+   You Can Download The Purchased Images From Your Profile Page.
+
+     
+  Regards,
+     
+  Photostudioroom
