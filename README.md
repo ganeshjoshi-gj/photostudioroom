@@ -1,11 +1,11 @@
 
 <h2> <b> Photostudioroom - Appointment Booking For Photoshoot &amp; Stock Images </b> </h2>
 
-I Made This Project in Python's <b> Django </b> Framework, For Database I Have Used <b> MySQL </b> and It is in The Development Server.
+I Made This Project in Python's <b> Django </b> Framework, For Database I Have Used <b> MySQL </b> and It is in The Development Server. <br>
 
-Photostudioroom is The Name Of This Website,
-There Are <b> Two </b>Facilities In My Website/Project,
-First is Appointment Booking For Photoshoot and Second is Stock Images Where Customer Can Purchase Images and Contributor Can Upload Images.
+Photostudioroom is The Name Of This Website, <br>
+There Are <b> Two </b>Facilities In My Website/Project, <br>
+First is Appointment Booking For Photoshoot and Second is Stock Images Where Customer Can Purchase Images and Contributor Can Upload Images. <br>
 
 <b> Appointment Booking:  </b>
 If Anyone Wants to Do a Photoshoot Then They Have to Go to a Studio and Wait For Their Turn,
@@ -22,7 +22,7 @@ For Photoshoot I Have Also Selected Some Events Like Baby Shower,Pre-Wedding,Wed
 So You Can Also Call Photographers To Your Preferred Place For a Photoshoot.
 
 <b> Stock Images: </b>
-Stock Images is Not a New Thing, 
+Stock Images is Not a New Thing, <br>
 Here You Can Register as a Customer or as a Contributor,
 
 <u> Customer: </u> Can View Watermarked Images, Like Them, Purchase Them and Download Them Without Watermark After Purchase.
