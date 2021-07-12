@@ -25,7 +25,7 @@ So You Can Also Call Photographers To Your Preferred Place For a Photoshoot.
 Stock Images is Not a New Thing, <br>
 Here You Can Register as a Customer or as a Contributor,
 
-<u> Customer: </u> Can View Watermarked Images, Like Them, Purchase Them and Download Them Without Watermark After Purchase.
+<u> Customer: </u> Can View Watermarked Images, Like Them, Purchase Them and Download Them Without Watermark After Purchase.<br>
 <u> Contributor: </u> Can Upload Images, If Approved By The Admin Then They Can Earn Money If Their Image Made Money On The Website, Can Also View Analytics Of Their Images.
 
 So The Concept is Simple, Contributors Will Upload Images, If Admin Approves Then The Images Will Go Live On The Website,
