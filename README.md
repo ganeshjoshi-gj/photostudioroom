@@ -3,9 +3,9 @@
 
 I Made This Project in Python's <b> Django </b> Framework, For Database I Have Used <b> MySQL </b> and It is in The Development Server. <br>
 
-Photostudioroom is The Name Of This Website, <br>
+<b> Photostudioroom </b> is The Name Of This Website, <br>
 There Are <b> Two </b>Facilities In My Website/Project, <br>
-First is Appointment Booking For Photoshoot and Second is Stock Images Where Customer Can Purchase Images and Contributor Can Upload Images. <br>
+First is <b> Appointment Booking For Photoshoot </b> and Second is <b> Stock Images </b> Where Customer Can Purchase Images and Contributor Can Upload Images. <br>
 
 <b> Appointment Booking:  </b>
 If Anyone Wants to Do a Photoshoot Then They Have to Go to a Studio and Wait For Their Turn,
